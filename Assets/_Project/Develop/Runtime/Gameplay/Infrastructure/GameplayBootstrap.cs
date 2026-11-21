@@ -4,7 +4,6 @@ using _Project.Develop.Runtime.Features.Gamecycle;
 using _Project.Develop.Runtime.Gameplay.EntitiesCore;
 using _Project.Develop.Runtime.Gameplay.EntitiesCore.Mono;
 using _Project.Develop.Runtime.Gameplay.Features.AI;
-using _Project.Develop.Runtime.Gameplay.Features.MainHero;
 using _Project.Develop.Runtime.Infrastructure;
 using _Project.Develop.Runtime.Infrastructure.DI;
 using _Project.Develop.Runtime.Utilities.CoroutineManagement;
@@ -39,8 +38,6 @@ namespace _Project.Develop.Runtime.Gameplay.Infrastructure
 			_gameCycle = _container.Resolve<GameplayCycle>();
 			_entitiesContext =  _container.Resolve<EntitiesLifeContext>();
 			_aiBrainsContext = _container.Resolve<AIBrainsContext>();
-
-			_container.Resolve<MainHeroFactory>().Create(Vector3.zero);
 
 			yield break;
 		}

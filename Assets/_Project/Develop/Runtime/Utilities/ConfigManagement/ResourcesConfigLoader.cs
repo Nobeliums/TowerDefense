@@ -19,7 +19,6 @@ namespace _Project.Develop.Runtime.Utilities.ConfigManagement
             {typeof(StartWalletConfig), "Configs/StartWalletConfig"},
             {typeof(ShopConfig), "Configs/ShopConfig"},
             {typeof(StartWalletViewConfig), "Configs/StartWalletViewConfig"},
-            {typeof(PlayerConfig), "Configs/Player/PlayerConfig"},
             {typeof(GhostConfig), "Configs/Ghost/GhostConfig"},
             {typeof(GhostTeleportConfig), "Configs/TeleportGhost/TeleportGhostConfig"},
             {typeof(ClearAllEnemiesStageConfig), "Configs/Stages/ClearAllEnemiesStageConfig"},

@@ -275,23 +275,6 @@ namespace _Project.Develop.Runtime.Gameplay.EntitiesCore
 			return result;
 		}
 
-		public _Project.Develop.Runtime.Gameplay.Common.CharacterControllerComponent CharacterControllerComponentC => GetComponent<_Project.Develop.Runtime.Gameplay.Common.CharacterControllerComponent>();
-		public UnityEngine.CharacterController CharacterControllerComponent => CharacterControllerComponentC.Value;
-		public Entity AddCharacterControllerComponent(UnityEngine.CharacterController value = default)
-		{
-			var component = new _Project.Develop.Runtime.Gameplay.Common.CharacterControllerComponent();
-			component.Value = value;
-			AddComponent(component);
-			return this;
-		}
-
-		public bool TryGetCharacterControllerComponent(out UnityEngine.CharacterController component)
-		{
-			bool result = TryGetComponent<_Project.Develop.Runtime.Gameplay.Common.CharacterControllerComponent>(out _Project.Develop.Runtime.Gameplay.Common.CharacterControllerComponent rawComponent);
-			component = result ? rawComponent.Value : default;
-			return result;
-		}
-
 		public _Project.Develop.Runtime.Gameplay.Features.Sensors.ContactColliderBuffer ContactColliderBufferC => GetComponent<_Project.Develop.Runtime.Gameplay.Features.Sensors.ContactColliderBuffer>();
 		public _Project.Develop.Runtime.Utilities.Buffer<UnityEngine.Collider> ContactColliderBuffer => ContactColliderBufferC.Value;
 		public Entity AddContactColliderBuffer(_Project.Develop.Runtime.Utilities.Buffer<UnityEngine.Collider> value = default)
@@ -588,13 +571,6 @@ namespace _Project.Develop.Runtime.Gameplay.EntitiesCore
 			return this;
 		}
 
-		public _Project.Develop.Runtime.Gameplay.Features.Tower.IsTower IsTowerC => GetComponent<_Project.Develop.Runtime.Gameplay.Features.Tower.IsTower>();
-		public Entity AddIsTower()
-		{
-			AddComponent(new _Project.Develop.Runtime.Gameplay.Features.Tower.IsTower());
-			return this;
-		}
-
 		public _Project.Develop.Runtime.Gameplay.Features.MovementFeuture.IsMoving IsMovingC => GetComponent<_Project.Develop.Runtime.Gameplay.Features.MovementFeuture.IsMoving>();
 		public _Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Boolean> IsMoving => IsMovingC.Value;
 		public Entity AddIsMoving(_Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Boolean> value = default)
@@ -644,6 +620,13 @@ namespace _Project.Develop.Runtime.Gameplay.EntitiesCore
 			bool result = TryGetComponent<_Project.Develop.Runtime.Gameplay.Features.Sensors.IsTouchDeathMask>(out _Project.Develop.Runtime.Gameplay.Features.Sensors.IsTouchDeathMask rawComponent);
 			component = result ? rawComponent.Value : default;
 			return result;
+		}
+
+		public _Project.Develop.Runtime.Gameplay.Features.Tower.IsTower IsTowerC => GetComponent<_Project.Develop.Runtime.Gameplay.Features.Tower.IsTower>();
+		public Entity AddIsTower()
+		{
+			AddComponent(new _Project.Develop.Runtime.Gameplay.Features.Tower.IsTower());
+			return this;
 		}
 
 		public _Project.Develop.Runtime.Gameplay.Features.LIfeCycle.Energy.MaxEnergy MaxEnergyC => GetComponent<_Project.Develop.Runtime.Gameplay.Features.LIfeCycle.Energy.MaxEnergy>();
@@ -1269,18 +1252,6 @@ namespace _Project.Develop.Runtime.Gameplay.EntitiesCore
 		public Entity AddBodyContactsEntitiesFilterSystem(_Project.Develop.Runtime.Gameplay.EntitiesCore.CollidersRegistryService collidersRegistryService)
 		{
 			AddSystem(new _Project.Develop.Runtime.Gameplay.Features.Sensors.BodyContactsEntitiesFilterSystem(collidersRegistryService));
-			return this;
-		}
-
-		public Entity AddCharacterControllerMovementSystem()
-		{
-			AddSystem(new _Project.Develop.Runtime.Gameplay.Features.MovementFeuture.CharacterControllerMovementSystem());
-			return this;
-		}
-
-		public Entity AddCharacterControllerRotationSystem()
-		{
-			AddSystem(new _Project.Develop.Runtime.Gameplay.Features.MovementFeuture.CharacterControllerRotationSystem());
 			return this;
 		}
 

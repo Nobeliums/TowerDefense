@@ -8,7 +8,6 @@ using _Project.Develop.Runtime.Gameplay.Features.Attack;
 using _Project.Develop.Runtime.Infrastructure.DI;
 using _Project.Develop.Runtime.Utilities.Conditions;
 using _Project.Develop.Runtime.Utilities.ConfigManagement;
-using _Project.Develop.Runtime.Utilities.Input;
 using _Project.Develop.Runtime.Utilities.Reactive;
 using _Project.Develop.Runtime.Utilities.TimerService;
 using UnityEngine;
@@ -20,7 +19,6 @@ namespace _Project.Develop.Runtime.Gameplay.Features.AI
 		private readonly DIContainer _container;
 		private readonly TimerServiceFactory _timerServiceFactory;
 		private readonly AIBrainsContext _aiBrainsContext;
-		private readonly IInputService _inputService;
 		private readonly EntitiesLifeContext _entitiesLifeContext;
 
 		public BrainsFactory(DIContainer container)
@@ -29,71 +27,7 @@ namespace _Project.Develop.Runtime.Gameplay.Features.AI
 			
 			_timerServiceFactory = _container.Resolve<TimerServiceFactory>();
 			_aiBrainsContext = _container.Resolve<AIBrainsContext>();
-			_inputService = _container.Resolve<IInputService>();
 			_entitiesLifeContext = container.Resolve<EntitiesLifeContext>();
-		}
-
-		public StateMachineBrain CreateMainHeroBrain(Entity entity, ITargetSelector targetSelector)
-		{
-			AIStateMachine combatState = CreateAutoAttackStateMachine(entity);
-
-			PlayerInputMovementState movementState = new PlayerInputMovementState(_inputService, entity);
-			
-			ReactiveVariable<Entity> currentTarget = entity.CurrentTarget;
-
-			ICompositeCondition fromMovementToCombatStateCondition = new CompositeCondition()
-				.AddCondition(new FuncCondition(() => currentTarget.Value != null))
-				.AddCondition(new FuncCondition(() => _inputService.Direction == Vector3.zero));
-			
-			ICompositeCondition fromCombatToMovementStateCondition = new CompositeCondition(LogicOperations.Or)
-				.AddCondition(new FuncCondition(() => currentTarget.Value == null))
-				.AddCondition(new FuncCondition(() => _inputService.Direction != Vector3.zero));
-
-			AIStateMachine behaviour = new AIStateMachine();
-			
-			behaviour.AddState(movementState);
-			behaviour.AddState(combatState);
-			
-			behaviour.AddTransition(movementState, combatState, fromMovementToCombatStateCondition);
-			behaviour.AddTransition(combatState, movementState, fromCombatToMovementStateCondition);
-
-			FindTargetState findTargetState = new FindTargetState(targetSelector, _entitiesLifeContext, entity);
-			AIParallelState parallelState = new AIParallelState(findTargetState, behaviour);
-
-			AIStateMachine rootStateMachin = new AIStateMachine();
-			
-			rootStateMachin.AddState(parallelState);
-
-			StateMachineBrain brain = new StateMachineBrain(rootStateMachin);
-			_aiBrainsContext.SetFor(entity, brain);
-
-			return brain;
-		}
-
-		public StateMachineBrain CreateMainHeroBrainWithManualAttack(Entity entity)
-		{
-			AIStateMachine combatState = CreateManualAttackStateMachine(entity);
-
-			PlayerInputMovementState movementState = new PlayerInputMovementState(_inputService, entity);
-
-			ICompositeCondition fromMovementToCombatStateCondition = new CompositeCondition()
-				.AddCondition(new FuncCondition(() => _inputService.Direction == Vector3.zero));
-			
-			ICompositeCondition fromCombatToMovementStateCondition = new CompositeCondition(LogicOperations.Or)
-				.AddCondition(new FuncCondition(() => _inputService.Direction != Vector3.zero));
-
-			AIStateMachine behaviour = new AIStateMachine();
-			
-			behaviour.AddState(movementState);
-			behaviour.AddState(combatState);
-			
-			behaviour.AddTransition(movementState, combatState, fromMovementToCombatStateCondition);
-			behaviour.AddTransition(combatState, movementState, fromCombatToMovementStateCondition);
-
-			StateMachineBrain brain = new StateMachineBrain(behaviour);
-			_aiBrainsContext.SetFor(entity, brain);
-
-			return brain;
 		}
 
 		public StateMachineBrain CreateGhostBrain(Entity entity)
@@ -103,16 +37,6 @@ namespace _Project.Develop.Runtime.Gameplay.Features.AI
 			
 			_aiBrainsContext.SetFor(entity, brain);
 			
-			return brain;
-		}
-
-		public StateMachineBrain CreateGhostTeleportToRandomPointBrain(Entity entity)
-		{
-			AIStateMachine stateMachine = CreateTeleportStateMachine(entity, new RandomPointInRadiusSelector(entity.TeleportRadius));
-			StateMachineBrain brain = new StateMachineBrain(stateMachine);
-			
-			_aiBrainsContext.SetFor(entity, brain);
-
 			return brain;
 		}
 
@@ -216,32 +140,6 @@ namespace _Project.Develop.Runtime.Gameplay.Features.AI
 			return stateMachine;
 		}
 		
-		private AIStateMachine CreateManualAttackStateMachine(Entity entity)
-		{
-			RotateToInputDeltaState rotateToInputState = new RotateToInputDeltaState(entity, _inputService);
-			AttackTriggerState attackTriggerState = new AttackTriggerState(entity);
-
-			ICondition canAttack = entity.GetComponent<CanStartAttack>().Value;
-
-			ICompositeCondition fromRotateToAttackCondition = new CompositeCondition()
-				.AddCondition(canAttack)
-				.AddCondition(new FuncCondition(() => _inputService.IsAttackButtonPressed));
-			
-			ReactiveVariable<bool> inAttackProcess = entity.GetComponent<InAttackProcess>().Value;
-
-			ICondition fromAttackToRotateStateCondition = new FuncCondition(() => inAttackProcess.Value == false);
-
-			AIStateMachine stateMachine = new AIStateMachine();
-			
-			stateMachine.AddState(rotateToInputState);
-			stateMachine.AddState(attackTriggerState);
-			
-			stateMachine.AddTransition(rotateToInputState, attackTriggerState, fromRotateToAttackCondition);
-			stateMachine.AddTransition(attackTriggerState, rotateToInputState, fromAttackToRotateStateCondition);
-			
-			return stateMachine;
-		}
-
 		private AIStateMachine CreateAutoAttackStateMachine(Entity entity)
 		{
 			RotateToTargetState rotateToTargetState = new RotateToTargetState(entity);

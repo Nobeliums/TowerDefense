@@ -35,7 +35,9 @@ namespace _Project.Develop.Runtime.Infrastructure.EntryPoint
 		private IEnumerator Initialize(DIContainer container)
 		{
 			ILoadingScreen loadingScreen = container.Resolve<ILoadingScreen>();
-			
+
+			yield return container.Resolve<ConfigService>().LoadAsync();
+
 			PlayerDataProvider playerDataProvider = container.Resolve<PlayerDataProvider>();
 			
 			bool isExists = false;
@@ -47,8 +49,6 @@ namespace _Project.Develop.Runtime.Infrastructure.EntryPoint
 				container.Resolve<ICoroutinePerformer>().StartPerform(playerDataProvider.LoadAsync());
 			else
 				container.Resolve<ICoroutinePerformer>().StartPerform(playerDataProvider.Reset());
-
-			yield return container.Resolve<ConfigService>().LoadAsync();
 
 			yield return container.Resolve<SceneSwitcherService>().ProcessSceneSwitchTo(Scenes.MainMenu);
 

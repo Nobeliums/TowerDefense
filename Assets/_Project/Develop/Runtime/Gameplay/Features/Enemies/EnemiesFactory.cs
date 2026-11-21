@@ -3,6 +3,7 @@ using _Project.Develop.Runtime.Gameplay.Configs;
 using _Project.Develop.Runtime.Gameplay.Configs.Entities;
 using _Project.Develop.Runtime.Gameplay.EntitiesCore;
 using _Project.Develop.Runtime.Gameplay.Features.AI;
+using _Project.Develop.Runtime.Gameplay.Features.AI.States;
 using _Project.Develop.Runtime.Gameplay.Features.TeamsFeutere;
 using _Project.Develop.Runtime.Infrastructure.DI;
 using _Project.Develop.Runtime.Utilities.ConfigManagement;
@@ -42,8 +43,8 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Enemies
 					break;
 				
 				case GhostTeleportConfig ghostTeleportConfig:
-					entity = _entitiesFactory.CreateTeleportGhost(position, ghostTeleportConfig);
-					_brainsFactory.CreateGhostTeleportToRandomPointBrain(entity);
+					entity = _entitiesFactory.CreateTeleportToTargetGhost(position, ghostTeleportConfig);
+					_brainsFactory.CreateGhostTeleportToTargetBrain(entity, new NearestDamageableTargetSelector(entity));
 					break;
 				
 				default:

@@ -41,7 +41,6 @@ namespace _Project.Develop.Runtime.Gameplay.Infrastructure
 			container.RegistryAsSingle(CreateAIBrainsContext);
 			container.RegistryAsSingle(CreateDesktopInputService);
 			container.RegistryAsSingle(CreateEnemiesFactory);
-			container.RegistryAsSingle(CreateMainHeroFactory);
 			container.RegistryAsSingle(CreateStageFactory);
 			container.RegistryAsSingle(CreateStageProviderService);
 			container.RegistryAsSingle(CreatePreparationTriggerService);
@@ -92,9 +91,6 @@ namespace _Project.Develop.Runtime.Gameplay.Infrastructure
 		{
 			return new GameplayStatesFactory(c);
 		}
-
-		private static MainHeroFactory CreateMainHeroFactory(DIContainer c)
-			=> new MainHeroFactory(c);
 
 		private static IInputService CreateDesktopInputService(DIContainer c)
 			=> new DesktopInputService();

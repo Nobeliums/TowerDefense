@@ -2,7 +2,7 @@
 
 namespace _Project.Develop.Runtime.Gameplay.Configs
 {
-	[CreateAssetMenu(fileName = "DamageConfig", menuName = "Project/DamageConfig")]
+	[CreateAssetMenu(fileName = "DamageConfig", menuName = "Project/Common/AttackConfig")]
 	public class AttackConfig : ScriptableObject
 	{
 		[field: SerializeField]

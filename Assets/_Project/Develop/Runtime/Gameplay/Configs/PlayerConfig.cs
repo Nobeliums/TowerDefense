@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace _Project.Develop.Runtime.Gameplay.Configs
 {
-	[CreateAssetMenu(fileName = "PlayerConfig", menuName = "Gameplay/PlayerConfig")]
+	[CreateAssetMenu(fileName = "PlayerConfig", menuName = "Project/Player/PlayerConfig")]
 	public class PlayerConfig : ScriptableObject
 	{
 		[field: SerializeField]

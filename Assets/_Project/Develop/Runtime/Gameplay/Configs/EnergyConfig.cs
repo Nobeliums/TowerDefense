@@ -2,7 +2,7 @@
 
 namespace _Project.Develop.Runtime.Gameplay.Configs
 {
-	[CreateAssetMenu(menuName = "Project/EnergyConfig", fileName = "EnergyConfig")]
+	[CreateAssetMenu(menuName = "Project/Common/EnergyConfig", fileName = "EnergyConfig")]
 	public class EnergyConfig : ScriptableObject
 	{
 		[field: SerializeField, Min(0)]

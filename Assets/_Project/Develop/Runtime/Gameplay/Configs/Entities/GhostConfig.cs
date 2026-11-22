@@ -4,7 +4,7 @@ using UnityEngine.Serialization;
 
 namespace _Project.Develop.Runtime.Gameplay.Configs
 {
-	[CreateAssetMenu(menuName = "Project/GhostConfig", fileName = "GhostConfig", order = 0)]
+	[CreateAssetMenu(menuName = "Project/Enemies/GhostConfig", fileName = "GhostConfig", order = 0)]
 	public class GhostConfig : EntityConfig
 	{
 		[field: SerializeField]

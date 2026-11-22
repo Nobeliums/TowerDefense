@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace _Project.Develop.Runtime.Meta.Configs
 {
-	[CreateAssetMenu(fileName = "ShopConfig", menuName = "Project/ShopConfig")]
+	[CreateAssetMenu(fileName = "ShopConfig", menuName = "Project/Meta/ShopConfig")]
 	public class ShopConfig : ScriptableObject
 	{
 		[field: SerializeField]

@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace _Project.Develop.Runtime.Gameplay.Configs
 {
-	[CreateAssetMenu(fileName = "ExplosionConfig", menuName = "Project/ExplosionConfig")]
+	[CreateAssetMenu(fileName = "ExplosionConfig", menuName = "Project/Common/ExplosionConfig")]
 	public class ExplosionConfig : ScriptableObject
 	{
 		[field: SerializeField]

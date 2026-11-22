@@ -2,7 +2,7 @@
 
 namespace _Project.Develop.Runtime.Gameplay.Configs
 {
-	[CreateAssetMenu(menuName = "Project/HealthConfig", fileName = "HealthConfig", order = 0)]
+	[CreateAssetMenu(menuName = "Project/Common/HealthConfig", fileName = "HealthConfig", order = 0)]
 	public class HealthConfig : ScriptableObject
 	{
 		[field: SerializeField, Min(0)]

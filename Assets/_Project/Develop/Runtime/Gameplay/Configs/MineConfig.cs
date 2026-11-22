@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace _Project.Develop.Runtime.Gameplay.Configs
 {
-	[CreateAssetMenu(fileName = "MineConfig", menuName = "Project/MineConfig")]
+	[CreateAssetMenu(fileName = "MineConfig", menuName = "Project/Player/MineConfig")]
 	public class MineConfig : ScriptableObject
 	{
 		[field: SerializeField, Min(0)]

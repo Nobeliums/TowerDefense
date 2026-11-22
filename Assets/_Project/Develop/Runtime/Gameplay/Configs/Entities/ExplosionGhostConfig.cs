@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace _Project.Develop.Runtime.Gameplay.Configs.Entities
 {
-	[CreateAssetMenu(fileName = "ExplosionGhostConfig", menuName = "Project/ExplosionGhostConfig")]
+	[CreateAssetMenu(fileName = "ExplosionGhostConfig", menuName = "Project/Enemies/ExplosionGhostConfig")]
 	public class ExplosionGhostConfig : EntityConfig
 	{
 		[field: SerializeField]

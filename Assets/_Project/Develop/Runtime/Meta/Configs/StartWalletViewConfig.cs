@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace _Project.Develop.Runtime.Meta.Configs
 {
-	[CreateAssetMenu(fileName = "StartWalletViewConfig", menuName = "Project/StartWalletViewConfig", order = 0)]
+	[CreateAssetMenu(fileName = "StartWalletViewConfig", menuName = "Project/Meta/StartWalletViewConfig", order = 0)]
 	public class StartWalletViewConfig : ScriptableObject
 	{
 		[field: SerializeField]

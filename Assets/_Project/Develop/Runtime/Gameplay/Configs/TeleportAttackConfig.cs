@@ -2,7 +2,7 @@
 
 namespace _Project.Develop.Runtime.Gameplay.Configs
 {
-	[CreateAssetMenu(menuName = "Project/Create TeleportAttackConfig", fileName = "TeleportAttackConfig", order = 0)]
+	[CreateAssetMenu(menuName = "Project/Common/TeleportAttackConfig", fileName = "TeleportAttackConfig", order = 0)]
 	public class TeleportAttackConfig : ScriptableObject
 	{
 		[field: SerializeField, Min(0)]

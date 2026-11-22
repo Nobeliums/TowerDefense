@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace _Project.Develop.Runtime.Gameplay.Configs.Stages
 {
-	[CreateAssetMenu(menuName = "Project/ClearAllEnemiesStageConfig", fileName = "ClearAllEnemiesStageConfig", order = 0)]
+	[CreateAssetMenu(menuName = "Project/Gameplay/Stages/ClearAllEnemiesStageConfig", fileName = "ClearAllEnemiesStageConfig", order = 0)]
 	public class ClearAllEnemiesStageConfig : StageConfig
 	{
 		[SerializeField]

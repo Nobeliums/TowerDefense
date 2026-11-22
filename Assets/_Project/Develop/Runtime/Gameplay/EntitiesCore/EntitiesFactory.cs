@@ -1,7 +1,9 @@
 ﻿using _Project.Develop.Runtime.Gameplay.Configs;
 using _Project.Develop.Runtime.Gameplay.Configs.Entities;
 using _Project.Develop.Runtime.Gameplay.EntitiesCore.Mono;
+using _Project.Develop.Runtime.Gameplay.Features.Explosion;
 using _Project.Develop.Runtime.Gameplay.Features.TeamsFeutere;
+using _Project.Develop.Runtime.Gameplay.Features.Tower;
 using _Project.Develop.Runtime.Infrastructure.DI;
 using _Project.Develop.Runtime.Utilities;
 using _Project.Develop.Runtime.Utilities.Conditions;
@@ -195,7 +197,7 @@ namespace _Project.Develop.Runtime.Gameplay.EntitiesCore
 			Entity entity = CreateEmpty();
 
 			MonoEntity monoEntity =
-				_monoEntitiesFactory.Create(entity, position, "PrefabsGameplay/Entity/GhostMonoEntity");
+				_monoEntitiesFactory.Create(entity, position, "Prefabs/Gameplay/Entity/GhostMonoEntity");
 			
 			entity				.AddMoveDirection()
 				.AddMoveSpeed(new ReactiveVariable<float>(config.MovementConfig.MoveSpeed))
@@ -212,7 +214,9 @@ namespace _Project.Develop.Runtime.Gameplay.EntitiesCore
 				.AddTakeDamageEvent()
 				.AddExplosionDamage(new ReactiveVariable<float>(config.ExplosionConfig.Damage))
 				.AddExplosionRadius(new ReactiveVariable<float>(config.ExplosionConfig.ExplosionRadius))
-				.AddExplosionTriggerDistance(new ReactiveVariable<float>(config.ExplosionTriggerDistance));
+				.AddExplosionTriggerDistance(new ReactiveVariable<float>(config.ExplosionTriggerDistance))
+				.AddIsDetonated()
+				.AddCurrentTarget();
 
 			ICompositeCondition canMove = new CompositeCondition()
 				.AddCondition(new FuncCondition(() => entity.IsDead.Value == false));
@@ -220,8 +224,9 @@ namespace _Project.Develop.Runtime.Gameplay.EntitiesCore
 			ICompositeCondition canRotate = new CompositeCondition()
 				.AddCondition(new FuncCondition(() => entity.IsDead.Value == false));
 
-			ICompositeCondition mustDie = new CompositeCondition()
-				.AddCondition(new FuncCondition(() => entity.CurrentHealth.Value <= 0f));
+			ICompositeCondition mustDie = new CompositeCondition(LogicOperations.Or)
+				.AddCondition(new FuncCondition(() => entity.CurrentHealth.Value <= 0f))
+				.AddCondition(new FuncCondition(() => entity.IsDetonated.Value));
 
 			ICompositeCondition mustRelease = new CompositeCondition()
 				.AddCondition(new FuncCondition(() => entity.IsDead.Value))
@@ -243,11 +248,12 @@ namespace _Project.Develop.Runtime.Gameplay.EntitiesCore
 				.AddApplyDamageSystem()
 				.AddDeathSystem()
 				.AddDeathProcessTimerSystem()
-				.AddSelfReleaseSystem(_entitiesContext);
+				.AddSelfReleaseSystem(_entitiesContext)
+				.AddExplosionTriggerSystem(Layers.CharacterMask, _container.Resolve<ExplosionService>());
 			
 			_entitiesContext.Add(entity);
 			
-			return null;
+			return entity;
 		}
 
 		public Entity CreateTeleportGhost(Vector3 position, GhostTeleportConfig config)

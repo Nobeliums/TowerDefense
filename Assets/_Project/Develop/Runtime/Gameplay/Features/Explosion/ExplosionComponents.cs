@@ -17,4 +17,9 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Explosion
 	{
 		public ReactiveVariable<float> Value;
 	}
+
+	public class IsDetonated : IEntityComponent
+	{
+		public ReactiveVariable<bool> Value;
+	}
 }

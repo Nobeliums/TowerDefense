@@ -47,6 +47,11 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Enemies
 					_brainsFactory.CreateGhostTeleportToTargetBrain(entity, new NearestDamageableTargetSelector(entity));
 					break;
 				
+				case ExplosionGhostConfig explosionGhostConfig:
+					entity = _entitiesFactory.CreateExplosionGhost(position, explosionGhostConfig);
+					_brainsFactory.CreateMoveToTowerBrain(entity);
+					break;
+				
 				default:
 					throw new ArgumentException($"Not suppoort {config.GetType()}");
 			}

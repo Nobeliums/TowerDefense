@@ -5,6 +5,7 @@ using _Project.Develop.Runtime.Gameplay.Configs;
 using _Project.Develop.Runtime.Gameplay.EntitiesCore;
 using _Project.Develop.Runtime.Gameplay.Features.AI.States;
 using _Project.Develop.Runtime.Gameplay.Features.Attack;
+using _Project.Develop.Runtime.Gameplay.Features.Tower;
 using _Project.Develop.Runtime.Infrastructure.DI;
 using _Project.Develop.Runtime.Utilities.Conditions;
 using _Project.Develop.Runtime.Utilities.ConfigManagement;
@@ -20,6 +21,7 @@ namespace _Project.Develop.Runtime.Gameplay.Features.AI
 		private readonly TimerServiceFactory _timerServiceFactory;
 		private readonly AIBrainsContext _aiBrainsContext;
 		private readonly EntitiesLifeContext _entitiesLifeContext;
+		private readonly TowerHolderService _towerHolderService;
 
 		public BrainsFactory(DIContainer container)
 		{
@@ -28,11 +30,13 @@ namespace _Project.Develop.Runtime.Gameplay.Features.AI
 			_timerServiceFactory = _container.Resolve<TimerServiceFactory>();
 			_aiBrainsContext = _container.Resolve<AIBrainsContext>();
 			_entitiesLifeContext = container.Resolve<EntitiesLifeContext>();
+			_towerHolderService = container.Resolve<TowerHolderService>();
 		}
 
 		public StateMachineBrain CreateGhostBrain(Entity entity)
 		{
 			AIStateMachine stateMachine = CreateRandomMovementStateMachine(entity);
+
 			StateMachineBrain brain = new StateMachineBrain(stateMachine);
 			
 			_aiBrainsContext.SetFor(entity, brain);
@@ -66,6 +70,43 @@ namespace _Project.Develop.Runtime.Gameplay.Features.AI
 			_aiBrainsContext.SetFor(entity, brain);
 
 			return brain;
+		}
+
+		public StateMachineBrain CreateMoveToTowerBrain(Entity entity)
+		{
+			AIStateMachine moveStateMachine =  CreateMoveToTowerStateMachine(entity);
+			
+			StateMachineBrain brain = new StateMachineBrain(moveStateMachine);
+
+			entity.CurrentTarget.Value = _towerHolderService.Tower;
+			
+			_aiBrainsContext.SetFor(entity, brain);
+
+			return brain;
+		}
+
+		private AIStateMachine CreateMoveToTowerStateMachine(Entity entity)
+		{
+			List<IDisposable> disposables = new();
+
+			MoveToTowerState movementState = new MoveToTowerState(_towerHolderService.Tower.TransformComponent, entity);
+
+			EmptyState emptyState = new EmptyState();
+
+			FuncCondition fromEmptyToMovementState =
+				new FuncCondition(() => _towerHolderService.Tower.IsDead.Value == false);
+			
+			FuncCondition fromMovementToEmptyState = new FuncCondition(() => _towerHolderService.Tower.IsDead.Value);
+			
+			AIStateMachine stateMachine = new AIStateMachine();
+			
+			stateMachine.AddState(emptyState);
+			stateMachine.AddState(movementState);
+			
+			stateMachine.AddTransition(emptyState, movementState, fromEmptyToMovementState);
+			stateMachine.AddTransition(movementState, emptyState,  fromMovementToEmptyState);
+
+			return stateMachine;
 		}
 
 		private AIStateMachine CreateTeleportStateMachine(Entity entity, IPointSelector pointSelector, ICompositeCondition additionalCondition = null)

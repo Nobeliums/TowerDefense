@@ -8,9 +8,9 @@ namespace _Project.Develop.Runtime.Gameplay.Configs.Stages
 	public class EnemyItemConfig
 	{
 		[field: SerializeField]
-		public Vector3 SpawnPosition { get; private set; }
-
-		[field: SerializeField]
 		public EntityConfig EntityConfig { get; private set; }
+
+		[field: SerializeField, Min(1)]
+		public int Count { get; private set; } = 1;
 	}
 }

@@ -3,15 +3,21 @@ using System.Collections.Generic;
 using _Project.Develop.Runtime.Gameplay.Configs.Stages;
 using _Project.Develop.Runtime.Gameplay.EntitiesCore;
 using _Project.Develop.Runtime.Gameplay.Features.Enemies;
+using _Project.Develop.Runtime.Gameplay.Features.Tower;
 using _Project.Develop.Runtime.Utilities.Reactive;
+using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace _Project.Develop.Runtime.Gameplay.Features.StageFeature
 {
 	public class ClearAllEnemiesStage : IStage
 	{
+		private const float MaxDegree = 360f;
+		
 		private ClearAllEnemiesStageConfig _config;
 		private EnemiesFactory _enemiesFactory;
 		private EntitiesLifeContext _entitiesLifeContext;
+		private TowerHolderService _towerHolderService;
 
 		private ReactiveEvent _completed;
 
@@ -19,11 +25,16 @@ namespace _Project.Develop.Runtime.Gameplay.Features.StageFeature
 
 		private Dictionary<Entity, IDisposable> _enemies = new();
 
-		public ClearAllEnemiesStage(ClearAllEnemiesStageConfig config, EnemiesFactory enemiesFactory, EntitiesLifeContext entitiesLifeContext)
+		public ClearAllEnemiesStage(
+			ClearAllEnemiesStageConfig config,
+			EnemiesFactory enemiesFactory,
+			EntitiesLifeContext entitiesLifeContext,
+			TowerHolderService towerHolderService)
 		{
 			_config = config;
 			_enemiesFactory = enemiesFactory;
 			_entitiesLifeContext = entitiesLifeContext;
+			_towerHolderService = towerHolderService;
 			_completed = new ReactiveEvent();
 		}
 
@@ -67,13 +78,23 @@ namespace _Project.Develop.Runtime.Gameplay.Features.StageFeature
 
 		private void SpawnEnemies()
 		{
+			Vector3 center = _towerHolderService.Tower.TransformComponent.position;
+
 			foreach (EnemyItemConfig enemyItem in _config.Enemies)
-				SpawnEnemy(enemyItem);
+				for (int i = 0; i < enemyItem.Count; i++)
+					SpawnEnemy(enemyItem, GetRandomPointOnCircle(center, _config.SpawnRadius));
 		}
 
-		private void SpawnEnemy(EnemyItemConfig enemyItem)
+		private Vector3 GetRandomPointOnCircle(Vector3 center, float radius)
 		{
-			Entity spawnedEnemy = _enemiesFactory.Create(enemyItem.SpawnPosition, enemyItem.EntityConfig);
+			float angle = Random.Range(0f, MaxDegree) * Mathf.Deg2Rad;
+
+			return center + new Vector3(Mathf.Cos(angle), 0f, Mathf.Sin(angle)) * radius;
+		}
+
+		private void SpawnEnemy(EnemyItemConfig enemyItem, Vector3 position)
+		{
+			Entity spawnedEnemy = _enemiesFactory.Create(position, enemyItem.EntityConfig);
 
 			IDisposable subscription = spawnedEnemy.IsDead.Subscribe((oldValue, isDead) =>
 			{

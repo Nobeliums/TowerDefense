@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84c429e2423b4e638b6acb8e239ad60d, type: 3}
+  m_Name: ExplosionGhostConfig
+  m_EditorClassIdentifier: 
+  <MovementConfig>k__BackingField: {fileID: 11400000, guid: 55e8570cd57a9bf429f30d14e2423b96, type: 2}
+  <HealthConfig>k__BackingField: {fileID: 11400000, guid: cd5edb8e55557084ca24bbc38b97c31f, type: 2}
+  <ExplosionConfig>k__BackingField: {fileID: 11400000, guid: 9a96bf6520af1eb44b044749b3742d3b, type: 2}
+  <ExplosionTriggerDistance>k__BackingField: 2

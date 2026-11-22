@@ -6,8 +6,12 @@ using _Project.Develop.Runtime.Gameplay.Features.StageFeature;
 using _Project.Develop.Runtime.Gameplay.Infrastructure;
 using _Project.Develop.Runtime.Infrastructure.DI;
 using _Project.Develop.Runtime.Features.Gamecycle;
+using _Project.Develop.Runtime.Gameplay.Configs;
+using _Project.Develop.Runtime.Gameplay.Features.Explosion;
+using _Project.Develop.Runtime.Gameplay.Features.GameplayInputHandlers;
 using _Project.Develop.Runtime.Meta.Features.LevelsProgression;
 using _Project.Develop.Runtime.Utilities.Conditions;
+using _Project.Develop.Runtime.Utilities.ConfigManagement;
 using _Project.Develop.Runtime.Utilities.CoroutineManagement;
 using _Project.Develop.Runtime.Utilities.DataManagment.DataProvider;
 using _Project.Develop.Runtime.Utilities.Input;
@@ -29,9 +33,9 @@ namespace _Project.Develop.Runtime.Gameplay.States
 			return new PreparationState(_container.Resolve<WaveStartRequestService>());
 		}
 
-		public StageProcessState CreateStageProcessState()
+		public StageProcessState CreateStageProcessState(IInputHandler inputHandler)
 		{
-			return new StageProcessState(_container.Resolve<StageProviderService>());
+			return new StageProcessState(_container.Resolve<StageProviderService>(), inputHandler);
 		}
 
 		public WinState CreateWinState(GameplayInputArgs args)
@@ -49,8 +53,13 @@ namespace _Project.Develop.Runtime.Gameplay.States
 		{
 			GameplayStateMachine stateMachine = new GameplayStateMachine();
 
+			IInputHandler inputHandler = new PlayerExplosionInputHandler(
+				_container.Resolve<ExplosionService>(),
+				_container.Resolve<IInputService>(),
+				_container.Resolve<ConfigService>().GetConfig<PlayerConfig>().ExplosionConfig);
+
 			PreparationState preparationState = CreatePreparationState();
-			StageProcessState stageProcessState = CreateStageProcessState();
+			StageProcessState stageProcessState = CreateStageProcessState(inputHandler);
 
 			stateMachine.AddState(preparationState);
 			stateMachine.AddState(stageProcessState);

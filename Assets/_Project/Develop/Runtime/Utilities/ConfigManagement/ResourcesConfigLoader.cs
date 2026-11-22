@@ -22,7 +22,8 @@ namespace _Project.Develop.Runtime.Utilities.ConfigManagement
             {typeof(GhostConfig), "Configs/Ghost/GhostConfig"},
             {typeof(GhostTeleportConfig), "Configs/TeleportGhost/TeleportGhostConfig"},
             {typeof(ClearAllEnemiesStageConfig), "Configs/Stages/ClearAllEnemiesStageConfig"},
-            {typeof(LevelListConfig), "Configs/Levels/LevelListConfig"}
+            {typeof(LevelListConfig), "Configs/Levels/LevelListConfig"},
+            {typeof(PlayerConfig), "Configs/Player/PlayerConfig" }
         };
         
         public ResourcesConfigLoader(ResourceLoadService resources)

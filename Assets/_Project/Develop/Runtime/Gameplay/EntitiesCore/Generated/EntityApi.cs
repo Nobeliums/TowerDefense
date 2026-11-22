@@ -615,6 +615,23 @@ namespace _Project.Develop.Runtime.Gameplay.EntitiesCore
 			return result;
 		}
 
+		public _Project.Develop.Runtime.Gameplay.Features.Explosion.IsDetonated IsDetonatedC => GetComponent<_Project.Develop.Runtime.Gameplay.Features.Explosion.IsDetonated>();
+		public _Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Boolean> IsDetonated => IsDetonatedC.Value;
+		public Entity AddIsDetonated(_Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Boolean> value = default)
+		{
+			var component = new _Project.Develop.Runtime.Gameplay.Features.Explosion.IsDetonated();
+			component.Value = value ?? new _Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Boolean>();
+			AddComponent(component);
+			return this;
+		}
+
+		public bool TryGetIsDetonated(out _Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Boolean> component)
+		{
+			bool result = TryGetComponent<_Project.Develop.Runtime.Gameplay.Features.Explosion.IsDetonated>(out _Project.Develop.Runtime.Gameplay.Features.Explosion.IsDetonated rawComponent);
+			component = result ? rawComponent.Value : default;
+			return result;
+		}
+
 		public _Project.Develop.Runtime.Gameplay.Features.MovementFeuture.IsMoving IsMovingC => GetComponent<_Project.Develop.Runtime.Gameplay.Features.MovementFeuture.IsMoving>();
 		public _Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Boolean> IsMoving => IsMovingC.Value;
 		public Entity AddIsMoving(_Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Boolean> value = default)
@@ -1344,6 +1361,12 @@ namespace _Project.Develop.Runtime.Gameplay.EntitiesCore
 		public Entity AddEnergyRegenerationTimerSystem()
 		{
 			AddSystem(new _Project.Develop.Runtime.Gameplay.Features.LIfeCycle.Energy.EnergyRegenerationTimerSystem());
+			return this;
+		}
+
+		public Entity AddExplosionTriggerSystem(UnityEngine.LayerMask explosionLayer, _Project.Develop.Runtime.Gameplay.Features.Explosion.ExplosionService explosionService)
+		{
+			AddSystem(new _Project.Develop.Runtime.Gameplay.Features.Explosion.ExplosionTriggerSystem(explosionLayer, explosionService));
 			return this;
 		}
 

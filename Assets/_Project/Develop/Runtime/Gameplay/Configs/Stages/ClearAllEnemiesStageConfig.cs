@@ -9,6 +9,9 @@ namespace _Project.Develop.Runtime.Gameplay.Configs.Stages
 		[SerializeField]
 		private List<EnemyItemConfig> _enemies;
 
+		[field: SerializeField, Min(0f)]
+		public float SpawnRadius { get; private set; } = 10f;
+
 		public IReadOnlyList<EnemyItemConfig> Enemies => _enemies;
 	}
 }

@@ -72,6 +72,24 @@ namespace _Project.Develop.Runtime.Gameplay.Features.AI
 			return brain;
 		}
 
+		public StateMachineBrain CreateMineBrain(Entity entity)
+		{
+			FindTargetState findTargetState = new FindTargetState(
+				new NearestDamageableTargetSelector(entity),
+				_entitiesLifeContext,
+				entity);
+
+			AIStateMachine stateMachine = new AIStateMachine();
+
+			stateMachine.AddState(findTargetState);
+
+			StateMachineBrain brain = new StateMachineBrain(stateMachine);
+
+			_aiBrainsContext.SetFor(entity, brain);
+
+			return brain;
+		}
+
 		public StateMachineBrain CreateMoveToTowerBrain(Entity entity)
 		{
 			AIStateMachine moveStateMachine =  CreateMoveToTowerStateMachine(entity);

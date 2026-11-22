@@ -9,6 +9,8 @@ using _Project.Develop.Runtime.Features.Gamecycle;
 using _Project.Develop.Runtime.Gameplay.Configs;
 using _Project.Develop.Runtime.Gameplay.Features.Explosion;
 using _Project.Develop.Runtime.Gameplay.Features.GameplayInputHandlers;
+using _Project.Develop.Runtime.Gameplay.Features.Mines;
+using _Project.Develop.Runtime.Meta.Features.Wallet;
 using _Project.Develop.Runtime.Meta.Features.LevelsProgression;
 using _Project.Develop.Runtime.Utilities.Conditions;
 using _Project.Develop.Runtime.Utilities.ConfigManagement;
@@ -28,9 +30,9 @@ namespace _Project.Develop.Runtime.Gameplay.States
 			_container = container;
 		}
 
-		public PreparationState CreatePreparationState()
+		public PreparationState CreatePreparationState(IInputHandler inputHandler)
 		{
-			return new PreparationState(_container.Resolve<WaveStartRequestService>());
+			return new PreparationState(_container.Resolve<WaveStartRequestService>(), inputHandler);
 		}
 
 		public StageProcessState CreateStageProcessState(IInputHandler inputHandler)
@@ -38,13 +40,10 @@ namespace _Project.Develop.Runtime.Gameplay.States
 			return new StageProcessState(_container.Resolve<StageProviderService>(), inputHandler);
 		}
 
-		public WinState CreateWinState(GameplayInputArgs args)
+		public WinState CreateWinState()
 		{
 			return new WinState(
 				_container.Resolve<IInputService>(),
-				_container.Resolve<LevelsProgressionService>(),
-				args,
-				_container.Resolve<PlayerDataProvider>(),
 				_container.Resolve<SceneSwitcherService>(),
 				_container.Resolve<ICoroutinePerformer>());
 		}
@@ -53,13 +52,21 @@ namespace _Project.Develop.Runtime.Gameplay.States
 		{
 			GameplayStateMachine stateMachine = new GameplayStateMachine();
 
-			IInputHandler inputHandler = new PlayerExplosionInputHandler(
+			PlayerConfig playerConfig = _container.Resolve<ConfigService>().GetConfig<PlayerConfig>();
+
+			IInputHandler playerExplosionInputHandler = new PlayerExplosionInputHandler(
 				_container.Resolve<ExplosionService>(),
 				_container.Resolve<IInputService>(),
-				_container.Resolve<ConfigService>().GetConfig<PlayerConfig>().ExplosionConfig);
+				playerConfig.ExplosionConfig);
 
-			PreparationState preparationState = CreatePreparationState();
-			StageProcessState stageProcessState = CreateStageProcessState(inputHandler);
+			IInputHandler minePlacementInputHandler = new MinePlacementInputHandler(
+				_container.Resolve<MinesFactory>(),
+				_container.Resolve<WalletService>(),
+				_container.Resolve<IInputService>(),
+				playerConfig.MineConfig);
+
+			PreparationState preparationState = CreatePreparationState(minePlacementInputHandler);
+			StageProcessState stageProcessState = CreateStageProcessState(playerExplosionInputHandler);
 
 			stateMachine.AddState(preparationState);
 			stateMachine.AddState(stageProcessState);
@@ -94,7 +101,7 @@ namespace _Project.Develop.Runtime.Gameplay.States
 			GameplayStateMachine stateMachine = new GameplayStateMachine(disposables);
 
 			GameplayStateMachine coreLoopState = CreateCoreLoopState();
-			WinState winState = CreateWinState(args);
+			WinState winState = CreateWinState();
 			DefeatState defeatState = CreateDefeatState();
 
 			GameResultHandler gameResultHandler = _container.Resolve<GameResultHandler>();

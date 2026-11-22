@@ -43,7 +43,10 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Explosion
 
 		public void OnUpdate(float dt)
 		{
-			if (_isDetonated.Value == false && DistanceToTarget() <= _explosionTriggerDistance.Value)
+			if (_isDetonated.Value || _target.Value == null)
+				return;
+
+			if (DistanceToTarget() <= _explosionTriggerDistance.Value)
 			{
 				_isDetonated.Value = true;
 				_explosionService.CreateExplosion(

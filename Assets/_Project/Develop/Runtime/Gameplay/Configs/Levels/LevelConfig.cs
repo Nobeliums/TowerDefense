@@ -13,6 +13,9 @@ namespace _Project.Develop.Runtime.Gameplay.Configs.Levels
 		[field: SerializeField, Min(1f)]
 		public float TowerMaxHealth { get; private set; } = 100f;
 
+		[field: SerializeField, Min(0)]
+		public int WinReward { get; private set; }
+
 		public IReadOnlyList<StageConfig> Stages => _stages;
 	}
 }

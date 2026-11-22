@@ -7,5 +7,8 @@ namespace _Project.Develop.Runtime.Gameplay.Configs
 	{
 		[field: SerializeField]
 		public ExplosionConfig ExplosionConfig { get; private set; }
+
+		[field: SerializeField]
+		public MineConfig MineConfig { get; private set; }
 	}
 }

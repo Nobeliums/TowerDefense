@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: PlayerConfig
   m_EditorClassIdentifier: 
   <ExplosionConfig>k__BackingField: {fileID: 11400000, guid: fa7e0aec45f90ff45be31a1afeb1244c, type: 2}
+  <MineConfig>k__BackingField: {fileID: 11400000, guid: 35119dc19de7d234c9262d1d5d6d7bae, type: 2}

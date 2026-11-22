@@ -16,3 +16,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a2daa9e90e19f084dbe92fad05b04c6f, type: 2}
   - {fileID: 11400000, guid: a2daa9e90e19f084dbe92fad05b04c6f, type: 2}
   - {fileID: 11400000, guid: a2daa9e90e19f084dbe92fad05b04c6f, type: 2}
+  <TowerMaxHealth>k__BackingField: 100
+  <WinReward>k__BackingField: 60

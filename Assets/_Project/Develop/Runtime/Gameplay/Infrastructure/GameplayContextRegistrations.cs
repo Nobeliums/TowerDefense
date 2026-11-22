@@ -5,9 +5,11 @@ using _Project.Develop.Runtime.Gameplay.EntitiesCore.Mono;
 using _Project.Develop.Runtime.Gameplay.Features.AI;
 using _Project.Develop.Runtime.Gameplay.Features.Enemies;
 using _Project.Develop.Runtime.Gameplay.Features.Explosion;
+using _Project.Develop.Runtime.Gameplay.Features.Mines;
 using _Project.Develop.Runtime.Gameplay.Features.StageFeature;
 using _Project.Develop.Runtime.Gameplay.Features.Tower;
 using _Project.Develop.Runtime.Gameplay.States;
+using _Project.Develop.Runtime.Meta.Features.LevelsProgression;
 using _Project.Develop.Runtime.Meta.Features.Wallet;
 using UnityEngine;
 using _Project.Develop.Runtime.Infrastructure.DI;
@@ -49,17 +51,28 @@ namespace _Project.Develop.Runtime.Gameplay.Infrastructure
 			container.RegistryAsSingle(CreateGameplayStatesFactory);
 			container.RegistryAsSingle(CreateGameResultHandler);
 			container.RegistryAsSingle(CreateTowerFactory);
+			container.RegistryAsSingle(CreateMinesFactory);
 		}
 
 		private static TowerFactory CreateTowerFactory(DIContainer c)
 			=> new TowerFactory(c);
 
+		private static MinesFactory CreateMinesFactory(DIContainer c)
+			=> new MinesFactory(c);
+
 		private static GameResultHandler CreateGameResultHandler(DIContainer c)
 		{
+			int levelNumber = c.Resolve<GameplayInputArgs>().LevelNumber;
+			LevelConfig levelConfig = c.Resolve<ConfigService>().GetConfig<LevelListConfig>().GetBy(levelNumber);
+
 			return new GameResultHandler(
 				c.Resolve<GameStatisticsService>(),
 				c.Resolve<PlayerDataProvider>(),
-				c.Resolve<ICoroutinePerformer>());
+				c.Resolve<ICoroutinePerformer>(),
+				c.Resolve<WalletService>(),
+				c.Resolve<LevelsProgressionService>(),
+				levelNumber,
+				levelConfig.WinReward);
 		}
 
 		private static EnemiesFactory CreateEnemiesFactory(DIContainer c)

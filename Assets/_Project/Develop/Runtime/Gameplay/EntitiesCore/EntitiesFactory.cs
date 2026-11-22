@@ -256,6 +256,38 @@ namespace _Project.Develop.Runtime.Gameplay.EntitiesCore
 			return entity;
 		}
 
+		public Entity CreateMineEntity(Vector3 position, MineConfig config)
+		{
+			Entity entity = CreateEmpty();
+
+			_monoEntitiesFactory.Create(entity, position, "Prefabs/Gameplay/Entity/Mine");
+
+			entity
+				.AddIsDead(new ReactiveVariable<bool>(false))
+				.AddCurrentTarget()
+				.AddExplosionDamage(new ReactiveVariable<float>(config.ExplosionConfig.Damage))
+				.AddExplosionRadius(new ReactiveVariable<float>(config.ExplosionConfig.ExplosionRadius))
+				.AddExplosionTriggerDistance(new ReactiveVariable<float>(config.TriggerDistance))
+				.AddIsDetonated();
+
+			ICompositeCondition mustDie = new CompositeCondition()
+				.AddCondition(new FuncCondition(() => entity.IsDetonated.Value));
+
+			ICompositeCondition mustRelease = new CompositeCondition()
+				.AddCondition(new FuncCondition(() => entity.IsDead.Value));
+
+			entity
+				.AddMustDie(mustDie)
+				.AddMustSelfRelease(mustRelease);
+
+			entity
+				.AddExplosionTriggerSystem(Layers.CharacterMask, _container.Resolve<ExplosionService>())
+				.AddDeathSystem()
+				.AddSelfReleaseSystem(_entitiesContext);
+
+			return entity;
+		}
+
 		public Entity CreateTeleportGhost(Vector3 position, GhostTeleportConfig config)
 		{
 			Entity entity = CreateEmpty();

@@ -1,4 +1,5 @@
 ﻿using _Project.Develop.Runtime.Features.Gamecycle;
+using _Project.Develop.Runtime.Gameplay.Features.StageFeature;
 using _Project.Develop.Runtime.Gameplay.Infrastructure;
 using _Project.Develop.Runtime.Infrastructure.DI;
 using _Project.Develop.Runtime.UI.Core.Popups;
@@ -21,7 +22,8 @@ namespace _Project.Develop.Runtime.UI.Core.Gameplay
 		{
 			return new GameplayPresenter(gameplayView, 
 				_container.Resolve<GameplayCycle>(), 
-				_container.Resolve<GameplayPopupService>());
+				_container.Resolve<GameplayPopupService>(),
+				_container.Resolve<WaveStartRequestService>());
 		}
 
 		public GameResultPopupPresenter CreateGameResultPopupPresenter(GameResultPopupView gameResultPopupView)

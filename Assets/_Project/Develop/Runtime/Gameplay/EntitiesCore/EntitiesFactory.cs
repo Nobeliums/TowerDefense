@@ -1,4 +1,5 @@
 ﻿using _Project.Develop.Runtime.Gameplay.Configs;
+using _Project.Develop.Runtime.Gameplay.Configs.Entities;
 using _Project.Develop.Runtime.Gameplay.EntitiesCore.Mono;
 using _Project.Develop.Runtime.Gameplay.Features.TeamsFeutere;
 using _Project.Develop.Runtime.Infrastructure.DI;
@@ -128,31 +129,7 @@ namespace _Project.Develop.Runtime.Gameplay.EntitiesCore
 			return entity;
 		}
 
-		public Entity CreateContactTrigger(Vector3 position)
-		{
-			GhostConfig config = _configService.GetConfig<GhostConfig>();
-
-			Entity entity = CreateEmpty();
-
-			MonoEntity monoEntity =
-				_monoEntitiesFactory.Create(entity, position, "Prefabs/Gameplay/Entity/Projectiles/ContactTrigger");
-
-			entity
-				.AddContactsDetectingMask(Layers.CharacterMask)
-				.AddContactColliderBuffer(new Buffer<Collider>(BufferSize))
-				.AddContactEntitiesBuffer(new Buffer<Entity>(BufferSize));
-
-			entity
-				.AddBodyContactsDetectingSystem()
-				.AddBodyContactsEntitiesFilterSystem(_collidersRegistryService);
-			
-			_entitiesContext.Add(entity);
-			
-			return entity;
-			
-		}
-		
-				public Entity CreateProjectile(Vector3 position, Vector3 direction, float damage, Entity owner)
+		public Entity CreateProjectile(Vector3 position, Vector3 direction, float damage, Entity owner)
 		{
 			GhostConfig config = _configService.GetConfig<GhostConfig>();
 
@@ -213,7 +190,66 @@ namespace _Project.Develop.Runtime.Gameplay.EntitiesCore
 			
 		}
 
-		
+		public Entity CreateExplosionGhost(Vector3 position, ExplosionGhostConfig config)
+		{
+			Entity entity = CreateEmpty();
+
+			MonoEntity monoEntity =
+				_monoEntitiesFactory.Create(entity, position, "PrefabsGameplay/Entity/GhostMonoEntity");
+			
+			entity				.AddMoveDirection()
+				.AddMoveSpeed(new ReactiveVariable<float>(config.MovementConfig.MoveSpeed))
+				.AddRotateDirection()
+				.AddIsMoving()
+				.AddRotateSpeed(new ReactiveVariable<float>(config.MovementConfig.RotationSpeed))
+				.AddMaxHealth(new ReactiveVariable<float>(config.HealthConfig.MaxHealth))
+				.AddCurrentHealth(new ReactiveVariable<float>(config.HealthConfig.StartHealth))
+				.AddIsDead(new ReactiveVariable<bool>(false))
+				.AddInDeathProcess(new ReactiveVariable<bool>(false))
+				.AddDeathProcessInitialTime(new ReactiveVariable<float>(config.HealthConfig.DeathProcessInitialTime))
+				.AddDeathProcessCurrentTime()
+				.AddTakeDamageRequest()
+				.AddTakeDamageEvent()
+				.AddExplosionDamage(new ReactiveVariable<float>(config.ExplosionConfig.Damage))
+				.AddExplosionRadius(new ReactiveVariable<float>(config.ExplosionConfig.ExplosionRadius))
+				.AddExplosionTriggerDistance(new ReactiveVariable<float>(config.ExplosionTriggerDistance));
+
+			ICompositeCondition canMove = new CompositeCondition()
+				.AddCondition(new FuncCondition(() => entity.IsDead.Value == false));
+
+			ICompositeCondition canRotate = new CompositeCondition()
+				.AddCondition(new FuncCondition(() => entity.IsDead.Value == false));
+
+			ICompositeCondition mustDie = new CompositeCondition()
+				.AddCondition(new FuncCondition(() => entity.CurrentHealth.Value <= 0f));
+
+			ICompositeCondition mustRelease = new CompositeCondition()
+				.AddCondition(new FuncCondition(() => entity.IsDead.Value))
+				.AddCondition(new FuncCondition(() => entity.InDeathProcess.Value == false));
+
+			ICompositeCondition canApplyDamage = new CompositeCondition()
+				.AddCondition(new FuncCondition(() => entity.IsDead.Value == false));
+
+			entity
+				.AddCanMove(canMove)
+				.AddCanRotate(canRotate)
+				.AddMustDie(mustDie)
+				.AddMustSelfRelease(mustRelease)
+				.AddCanApplyDamage(canApplyDamage);
+
+			entity
+				.AddRigidbodyMovementSystem()
+				.AddRigidbodyRotationSystem()
+				.AddApplyDamageSystem()
+				.AddDeathSystem()
+				.AddDeathProcessTimerSystem()
+				.AddSelfReleaseSystem(_entitiesContext);
+			
+			_entitiesContext.Add(entity);
+			
+			return null;
+		}
+
 		public Entity CreateTeleportGhost(Vector3 position, GhostTeleportConfig config)
 		{
 			Entity entity = CreateEmpty();

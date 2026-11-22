@@ -462,6 +462,57 @@ namespace _Project.Develop.Runtime.Gameplay.EntitiesCore
 			return result;
 		}
 
+		public _Project.Develop.Runtime.Gameplay.Features.Explosion.ExplosionDamage ExplosionDamageC => GetComponent<_Project.Develop.Runtime.Gameplay.Features.Explosion.ExplosionDamage>();
+		public _Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> ExplosionDamage => ExplosionDamageC.Value;
+		public Entity AddExplosionDamage(_Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> value = default)
+		{
+			var component = new _Project.Develop.Runtime.Gameplay.Features.Explosion.ExplosionDamage();
+			component.Value = value ?? new _Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single>();
+			AddComponent(component);
+			return this;
+		}
+
+		public bool TryGetExplosionDamage(out _Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> component)
+		{
+			bool result = TryGetComponent<_Project.Develop.Runtime.Gameplay.Features.Explosion.ExplosionDamage>(out _Project.Develop.Runtime.Gameplay.Features.Explosion.ExplosionDamage rawComponent);
+			component = result ? rawComponent.Value : default;
+			return result;
+		}
+
+		public _Project.Develop.Runtime.Gameplay.Features.Explosion.ExplosionRadius ExplosionRadiusC => GetComponent<_Project.Develop.Runtime.Gameplay.Features.Explosion.ExplosionRadius>();
+		public _Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> ExplosionRadius => ExplosionRadiusC.Value;
+		public Entity AddExplosionRadius(_Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> value = default)
+		{
+			var component = new _Project.Develop.Runtime.Gameplay.Features.Explosion.ExplosionRadius();
+			component.Value = value ?? new _Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single>();
+			AddComponent(component);
+			return this;
+		}
+
+		public bool TryGetExplosionRadius(out _Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> component)
+		{
+			bool result = TryGetComponent<_Project.Develop.Runtime.Gameplay.Features.Explosion.ExplosionRadius>(out _Project.Develop.Runtime.Gameplay.Features.Explosion.ExplosionRadius rawComponent);
+			component = result ? rawComponent.Value : default;
+			return result;
+		}
+
+		public _Project.Develop.Runtime.Gameplay.Features.Explosion.ExplosionTriggerDistance ExplosionTriggerDistanceC => GetComponent<_Project.Develop.Runtime.Gameplay.Features.Explosion.ExplosionTriggerDistance>();
+		public _Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> ExplosionTriggerDistance => ExplosionTriggerDistanceC.Value;
+		public Entity AddExplosionTriggerDistance(_Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> value = default)
+		{
+			var component = new _Project.Develop.Runtime.Gameplay.Features.Explosion.ExplosionTriggerDistance();
+			component.Value = value ?? new _Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single>();
+			AddComponent(component);
+			return this;
+		}
+
+		public bool TryGetExplosionTriggerDistance(out _Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> component)
+		{
+			bool result = TryGetComponent<_Project.Develop.Runtime.Gameplay.Features.Explosion.ExplosionTriggerDistance>(out _Project.Develop.Runtime.Gameplay.Features.Explosion.ExplosionTriggerDistance rawComponent);
+			component = result ? rawComponent.Value : default;
+			return result;
+		}
+
 		public _Project.Develop.Runtime.Gameplay.Features.Attack.InAttackCooldown InAttackCooldownC => GetComponent<_Project.Develop.Runtime.Gameplay.Features.Attack.InAttackCooldown>();
 		public _Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Boolean> InAttackCooldown => InAttackCooldownC.Value;
 		public Entity AddInAttackCooldown(_Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Boolean> value = default)
@@ -562,13 +613,6 @@ namespace _Project.Develop.Runtime.Gameplay.EntitiesCore
 			bool result = TryGetComponent<_Project.Develop.Runtime.Gameplay.Features.LIfeCycle.IsDead>(out _Project.Develop.Runtime.Gameplay.Features.LIfeCycle.IsDead rawComponent);
 			component = result ? rawComponent.Value : default;
 			return result;
-		}
-
-		public _Project.Develop.Runtime.Gameplay.Features.MainHero.IsMainHero IsMainHeroC => GetComponent<_Project.Develop.Runtime.Gameplay.Features.MainHero.IsMainHero>();
-		public Entity AddIsMainHero()
-		{
-			AddComponent(new _Project.Develop.Runtime.Gameplay.Features.MainHero.IsMainHero());
-			return this;
 		}
 
 		public _Project.Develop.Runtime.Gameplay.Features.MovementFeuture.IsMoving IsMovingC => GetComponent<_Project.Develop.Runtime.Gameplay.Features.MovementFeuture.IsMoving>();

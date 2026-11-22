@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections;
 using _Project.Develop.Runtime.Features.Gamecycle;
+using _Project.Develop.Runtime.Gameplay.Configs.Levels;
+using _Project.Develop.Runtime.Gameplay.Features.Tower;
 using _Project.Develop.Runtime.Gameplay.EntitiesCore;
 using _Project.Develop.Runtime.Gameplay.EntitiesCore.Mono;
 using _Project.Develop.Runtime.Gameplay.Features.AI;
 using _Project.Develop.Runtime.Infrastructure;
 using _Project.Develop.Runtime.Infrastructure.DI;
+using _Project.Develop.Runtime.Utilities.ConfigManagement;
 using _Project.Develop.Runtime.Utilities.CoroutineManagement;
 using _Project.Develop.Runtime.Utilities.DataManagment.DataProvider;
 using _Project.Develop.Runtime.Utilities.Input;
@@ -38,6 +41,12 @@ namespace _Project.Develop.Runtime.Gameplay.Infrastructure
 			_gameCycle = _container.Resolve<GameplayCycle>();
 			_entitiesContext =  _container.Resolve<EntitiesLifeContext>();
 			_aiBrainsContext = _container.Resolve<AIBrainsContext>();
+
+			LevelConfig levelConfig = _container.Resolve<ConfigService>()
+				.GetConfig<LevelListConfig>()
+				.GetBy(_container.Resolve<GameplayInputArgs>().LevelNumber);
+
+			_container.Resolve<TowerFactory>().Create(Vector3.zero, levelConfig.TowerMaxHealth);
 
 			yield break;
 		}

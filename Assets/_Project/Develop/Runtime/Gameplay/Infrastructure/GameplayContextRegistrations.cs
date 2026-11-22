@@ -4,7 +4,7 @@ using _Project.Develop.Runtime.Gameplay.EntitiesCore;
 using _Project.Develop.Runtime.Gameplay.EntitiesCore.Mono;
 using _Project.Develop.Runtime.Gameplay.Features.AI;
 using _Project.Develop.Runtime.Gameplay.Features.Enemies;
-using _Project.Develop.Runtime.Gameplay.Features.MainHero;
+using _Project.Develop.Runtime.Gameplay.Features.Explosion;
 using _Project.Develop.Runtime.Gameplay.Features.StageFeature;
 using _Project.Develop.Runtime.Gameplay.Features.Tower;
 using _Project.Develop.Runtime.Gameplay.States;
@@ -37,14 +37,15 @@ namespace _Project.Develop.Runtime.Gameplay.Infrastructure
 			container.RegistryAsSingle(CreateEntitiesLifeContext);
 			container.RegistryAsSingle(CreateMonoEntitiesFactory).NonLazy();
 			container.RegistryAsSingle(CreateCollidersRegistryService);
+			container.RegistryAsSingle(CreateExplosionService);
 			container.RegistryAsSingle(CreateBrainsFactory);
 			container.RegistryAsSingle(CreateAIBrainsContext);
 			container.RegistryAsSingle(CreateDesktopInputService);
 			container.RegistryAsSingle(CreateEnemiesFactory);
 			container.RegistryAsSingle(CreateStageFactory);
 			container.RegistryAsSingle(CreateStageProviderService);
-			container.RegistryAsSingle(CreatePreparationTriggerService);
-			container.RegistryAsSingle(CreateMainHeroHolderService).NonLazy();
+			container.RegistryAsSingle(CreateWaveStartRequestService);
+			container.RegistryAsSingle(CreateTowerHolderService).NonLazy();
 			container.RegistryAsSingle(CreateGameplayStatesFactory);
 			container.RegistryAsSingle(CreateGameResultHandler);
 			container.RegistryAsSingle(CreateTowerFactory);
@@ -75,17 +76,14 @@ namespace _Project.Develop.Runtime.Gameplay.Infrastructure
 			return new StageProviderService(levelConfig, c.Resolve<StageFactory>());
 		}
 
-		private static PreparationTriggerService CreatePreparationTriggerService(DIContainer c)
-		{
-			return new PreparationTriggerService(
-				c.Resolve<EntitiesFactory>(),
-				c.Resolve<EntitiesLifeContext>());
-		}
+		private static ExplosionService CreateExplosionService(DIContainer c)
+			=> new ExplosionService(c.Resolve<CollidersRegistryService>());
 
-		private static MainHeroHolderService CreateMainHeroHolderService(DIContainer c)
-		{
-			return new MainHeroHolderService(c.Resolve<EntitiesLifeContext>());
-		}
+		private static WaveStartRequestService CreateWaveStartRequestService(DIContainer c)
+			=> new WaveStartRequestService();
+
+		private static TowerHolderService CreateTowerHolderService(DIContainer c)
+			=> new TowerHolderService(c.Resolve<EntitiesLifeContext>());
 
 		private static GameplayStatesFactory CreateGameplayStatesFactory(DIContainer c)
 		{

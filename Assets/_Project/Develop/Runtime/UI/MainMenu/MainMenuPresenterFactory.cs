@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using _Project.Develop.Runtime.Infrastructure.DI;
 using _Project.Develop.Runtime.Meta.Features.GameStatistics;
+using _Project.Develop.Runtime.Meta.Features.LevelSelection;
 using _Project.Develop.Runtime.Meta.Features.ShopManagement;
 using _Project.Develop.Runtime.Meta.Features.Wallet;
 using _Project.Develop.Runtime.UI.Core.Popups;
@@ -9,6 +10,7 @@ using _Project.Develop.Runtime.UI.Presenters;
 using _Project.Develop.Runtime.UI.View;
 using _Project.Develop.Runtime.Utilities.CoroutineManagement;
 using _Project.Develop.Runtime.Utilities.DataManagment.DataProvider;
+using _Project.Develop.Runtime.Utilities.SceneManagment;
 
 namespace _Project.Develop.Runtime.UI.Core.MainMenu
 {
@@ -26,7 +28,10 @@ namespace _Project.Develop.Runtime.UI.Core.MainMenu
 			return new MainMenuPresenter(
 				mainMenuView,  
 				_container.Resolve<ProjectPresenterFactory>(),
-				_container.Resolve<MainMenuPopupService>());
+				_container.Resolve<MainMenuPopupService>(),
+				_container.Resolve<RandomLevelService>(),
+				_container.Resolve<SceneSwitcherService>(),
+				_container.Resolve<ICoroutinePerformer>());
 		}
 
 		public ShopItemButtonPresenter CreateShopItemButtonPresenter(

@@ -1,5 +1,8 @@
 ﻿using _Project.Develop.Runtime.Meta.Features.Wallet;
+using _Project.Develop.Runtime.Gameplay.Configs.Levels;
 using _Project.Develop.Runtime.Infrastructure.DI;
+using _Project.Develop.Runtime.Meta.Features.LevelSelection;
+using _Project.Develop.Runtime.Meta.Features.LevelsProgression;
 using _Project.Develop.Runtime.Meta.Configs;
 using _Project.Develop.Runtime.Meta.Features.ShopManagement;
 using _Project.Develop.Runtime.UI.Core;
@@ -16,11 +19,17 @@ namespace _Project.Develop.Runtime.Meta.Infrastructure
 		public static void Process(DIContainer container)
 		{
 			container.RegistryAsSingle(CreateShopService);
+			container.RegistryAsSingle(CreateRandomLevelService);
 			container.RegistryAsSingle(CreateMainMenuCanvasRoot).NonLazy();
 			container.RegistryAsSingle(CreateMainMenuPresenterFactory);
 			container.RegistryAsSingle(CreateMainMenuPresenter).NonLazy();
 			container.RegistryAsSingle(CreateMainMenuPopupService);
 		}
+
+		private static RandomLevelService CreateRandomLevelService(DIContainer c)
+			=> new RandomLevelService(
+				c.Resolve<ConfigService>().GetConfig<LevelListConfig>(),
+				c.Resolve<LevelsProgressionService>());
 
 		private static MainMenuPopupService CreateMainMenuPopupService(DIContainer c)
 		{

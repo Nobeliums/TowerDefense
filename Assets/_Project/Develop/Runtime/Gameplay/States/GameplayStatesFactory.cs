@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using _Project.Develop.Runtime.Gameplay.Configs.Stages;
-using _Project.Develop.Runtime.Gameplay.Features.MainHero;
+using _Project.Develop.Runtime.Gameplay.Features.Tower;
 using _Project.Develop.Runtime.Gameplay.Features.StageFeature;
 using _Project.Develop.Runtime.Gameplay.Infrastructure;
 using _Project.Develop.Runtime.Infrastructure.DI;
@@ -26,7 +26,7 @@ namespace _Project.Develop.Runtime.Gameplay.States
 
 		public PreparationState CreatePreparationState()
 		{
-			return new PreparationState(_container.Resolve<PreparationTriggerService>());
+			return new PreparationState(_container.Resolve<WaveStartRequestService>());
 		}
 
 		public StageProcessState CreateStageProcessState()
@@ -55,11 +55,11 @@ namespace _Project.Develop.Runtime.Gameplay.States
 			stateMachine.AddState(preparationState);
 			stateMachine.AddState(stageProcessState);
 
-			PreparationTriggerService preparationTriggerService = _container.Resolve<PreparationTriggerService>();
+			WaveStartRequestService waveStartRequestService = _container.Resolve<WaveStartRequestService>();
 			StageProviderService stageProviderService = _container.Resolve<StageProviderService>();
 
 			ICompositeCondition toStageProcessCondition = new CompositeCondition();
-			toStageProcessCondition.AddCondition(new FuncCondition(() => preparationTriggerService.HasMainHeroContact.Value));
+			toStageProcessCondition.AddCondition(new FuncCondition(() => waveStartRequestService.IsRequested));
 			toStageProcessCondition.AddCondition(new FuncCondition(() => stageProviderService.HasNextStage));
 
 			ICondition toPreparationCondition = new FuncCondition(() => stageProviderService.CurrentStageResult.Value == StageResults.Completed);
@@ -97,22 +97,20 @@ namespace _Project.Develop.Runtime.Gameplay.States
 			stateMachine.AddState(winState);
 			stateMachine.AddState(defeatState);
 
+			TowerHolderService towerHolderService = _container.Resolve<TowerHolderService>();
+
+			ICondition toDefeatCondition = new FuncCondition(() =>
+				towerHolderService.Tower != null && towerHolderService.Tower.IsDead.Value);
+
+			stateMachine.AddTransition(coreLoopState, defeatState, toDefeatCondition);
+
 			StageProviderService stageProviderService = _container.Resolve<StageProviderService>();
-			PreparationTriggerService preparationTriggerService = _container.Resolve<PreparationTriggerService>();
 
 			ICompositeCondition toWinCondition = new CompositeCondition();
-			toWinCondition.AddCondition(new FuncCondition(() => preparationTriggerService.HasMainHeroContact.Value));
 			toWinCondition.AddCondition(new FuncCondition(() => stageProviderService.CurrentStageResult.Value == StageResults.Completed));
 			toWinCondition.AddCondition(new FuncCondition(() => stageProviderService.HasNextStage == false));
 
 			stateMachine.AddTransition(coreLoopState, winState, toWinCondition);
-
-			MainHeroHolderService mainHeroHolderService = _container.Resolve<MainHeroHolderService>();
-
-			ICondition toDefeatCondition = new FuncCondition(() =>
-				mainHeroHolderService.MainHero != null && mainHeroHolderService.MainHero.IsDead.Value);
-
-			stateMachine.AddTransition(coreLoopState, defeatState, toDefeatCondition);
 
 			return stateMachine;
 		}

@@ -13,8 +13,10 @@ namespace _Project.Develop.Runtime.UI.Core.Gameplay
 		[SerializeField] private Button _startWaveButton;
 		[SerializeField] private EntitiesHealthDisplay _healthText;
 		[SerializeField] private IconTextView _currentStageView;
+		[SerializeField] private IconTextView _goldView;
 
 		public EntitiesHealthDisplay HealthDisplay => _healthText;
+		public IconTextView GoldView => _goldView;
 
 		private void Awake() => _startWaveButton.onClick.AddListener(OnStartWaveButtonClicked);
 

@@ -77,7 +77,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 8342977905377892292}
   m_FillRect: {fileID: 2114680044922102865}
   m_HandleRect: {fileID: 764555504590271598}
@@ -338,6 +338,7 @@ GameObject:
   - component: {fileID: 5773670680415600935}
   - component: {fileID: 5361423485867344510}
   - component: {fileID: -2170235140601075099}
+  - component: {fileID: 1498920933741904523}
   m_Layer: 5
   m_Name: EnemyHealthBar
   m_TagString: Untagged
@@ -395,6 +396,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _bar: {fileID: 5361423485867344510}
   _text: {fileID: 4419803507196152773}
+--- !u!225 &1498920933741904523
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3106272162767476458}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &5617896473130560722
 GameObject:
   m_ObjectHideFlags: 0

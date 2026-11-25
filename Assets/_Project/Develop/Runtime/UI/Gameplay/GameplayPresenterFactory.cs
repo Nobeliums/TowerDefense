@@ -3,6 +3,8 @@ using _Project.Develop.Runtime.Gameplay.Features.StageFeature;
 using _Project.Develop.Runtime.Gameplay.Infrastructure;
 using _Project.Develop.Runtime.Gameplay.EntitiesCore;
 using _Project.Develop.Runtime.Infrastructure.DI;
+using _Project.Develop.Runtime.Meta.Features.Wallet;
+using _Project.Develop.Runtime.UI.Presenters;
 using _Project.Develop.Runtime.UI.Core.Gameplay.Bars;
 using _Project.Develop.Runtime.UI.Core.Gameplay.Stages;
 using _Project.Develop.Runtime.UI.Core.Popups;
@@ -46,6 +48,14 @@ namespace _Project.Develop.Runtime.UI.Core.Gameplay
 
 		public HealthBarPresenter CreateHealthBarPresenter(BarWithTextView view, Entity entity)
 			=> new HealthBarPresenter(view, entity);
+
+		public CurrencyPresenter CreateGoldPresenter(IconTextView view)
+		{
+			return _container.Resolve<ProjectPresenterFactory>().CreateCurrencyPresenter(
+				view,
+				WalletCurrencyType.Gold,
+				_container.Resolve<WalletService>().GetCurrency(WalletCurrencyType.Gold));
+		}
 
 		public WinPopupPresenter CreateWinPopupPresenter(WinPopupView view)
 		{

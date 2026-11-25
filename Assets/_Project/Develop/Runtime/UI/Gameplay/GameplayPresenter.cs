@@ -51,6 +51,7 @@ namespace _Project.Develop.Runtime.UI.Core.Gameplay
 
 			CreateCurrentStageViewPresenter();
 			CreateEntitiesHealthDisplayPresenter();
+			CreateGoldPresenter();
 
 			foreach (IPresenter child in _children)
 				child.Initialize();
@@ -86,6 +87,13 @@ namespace _Project.Develop.Runtime.UI.Core.Gameplay
 				.CreateCurrentStageViewPresenter(_gameplayView);
 
 			_children.Add(currentStagePresenter);
+		}
+
+		private void CreateGoldPresenter()
+		{
+			CurrencyPresenter goldPresenter = _factory.CreateGoldPresenter(_gameplayView.GoldView);
+
+			_children.Add(goldPresenter);
 		}
 
 		private void CreateEntitiesHealthDisplayPresenter()

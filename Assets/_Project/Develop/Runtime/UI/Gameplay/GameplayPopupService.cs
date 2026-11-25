@@ -21,14 +21,25 @@ namespace _Project.Develop.Runtime.UI.Core.Gameplay
 
 		protected override Transform PopupLayer => _gameplayCanvasRoot.Popups;
 
-		public GameResultPopupPresenter CreateGameResultPopup()
+		public WinPopupPresenter CreateWinPopup()
 		{
-			GameResultPopupView view = _viewFactory.Create<GameResultPopupView>(ViewIds.GameResultPopupView, PopupLayer);
+			WinPopupView view = _viewFactory.Create<WinPopupView>(ViewIds.WinResultPopupView, PopupLayer);
 
-			GameResultPopupPresenter presenter = _gameplayPresenterFactory.CreateGameResultPopupPresenter(view);
+			WinPopupPresenter presenter = _gameplayPresenterFactory.CreateWinPopupPresenter(view);
 			
 			OnPopupCreated(presenter, view);
 			
+			return presenter;
+		}
+
+		public DefeatPopupPresenter CreateDefeatPopup()
+		{
+			DefeatPopupView view = _viewFactory.Create<DefeatPopupView>(ViewIds.DefeatResultPopupView, PopupLayer);
+
+			DefeatPopupPresenter presenter = _gameplayPresenterFactory.CreateDefeatPopupPresenter(view);
+
+			OnPopupCreated(presenter, view);
+
 			return presenter;
 		}
 	}

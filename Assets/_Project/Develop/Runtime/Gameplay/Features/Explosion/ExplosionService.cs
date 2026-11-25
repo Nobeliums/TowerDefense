@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using _Project.Develop.Runtime.Gameplay.EntitiesCore;
 using _Project.Develop.Runtime.Gameplay.Features.ApplyDamage;
@@ -15,6 +16,8 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Explosion
 
 		private CollidersRegistryService _collidersRegistryService;
 
+		public event Action<Vector3, float> Exploded;
+
 		public ExplosionService(CollidersRegistryService collidersRegistryService)
 		{
 			_collidersRegistryService = collidersRegistryService;
@@ -22,6 +25,8 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Explosion
 
 		public void CreateExplosion(Vector3 position,  float radius, float damage, LayerMask layerMask, Teams sourceTeam)
 		{
+			Exploded?.Invoke(position, radius);
+
 			_colliderBuffer.Count = Physics.OverlapSphereNonAlloc(position, radius, _colliderBuffer.Items, layerMask,
 				QueryTriggerInteraction.Ignore);
 

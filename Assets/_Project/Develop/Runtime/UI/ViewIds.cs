@@ -10,6 +10,9 @@
 		public const string ShopItemBuyButtonView = nameof(ShopItemBuyButtonView);
 		public const string ShopPopupView = nameof(ShopPopupView);
 		public const string GameplayView = nameof(GameplayView);
-		public const string GameResultPopupView = nameof(GameResultPopupView);
+		public const string WinResultPopupView = nameof(WinResultPopupView);
+		public const string DefeatResultPopupView = nameof(DefeatResultPopupView);
+		public const string TowerHealthBar = nameof(TowerHealthBar);
+		public const string EnemyHealthBar = nameof(EnemyHealthBar);
 	}
 }

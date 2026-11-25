@@ -1,4 +1,5 @@
 ﻿using System;
+using _Project.Develop.Runtime.UI.Core.Gameplay.Bars;
 using _Project.Develop.Runtime.UI.View;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,18 +10,19 @@ namespace _Project.Develop.Runtime.UI.Core.Gameplay
 	{
 		public event Action StartWaveClick;
 
-		[SerializeField] private TextBoxView _targetPhrase;
-		[SerializeField] private TextBoxView _playerPhrase;
 		[SerializeField] private Button _startWaveButton;
+		[SerializeField] private EntitiesHealthDisplay _healthText;
+		[SerializeField] private IconTextView _currentStageView;
+
+		public EntitiesHealthDisplay HealthDisplay => _healthText;
 
 		private void Awake() => _startWaveButton.onClick.AddListener(OnStartWaveButtonClicked);
 
 		private void OnDestroy() => _startWaveButton.onClick.RemoveListener(OnStartWaveButtonClicked);
 
-		public void SetTargetPhrase(string targetPhrase) =>  _targetPhrase.SetText(targetPhrase);
-		public void SetPlayerPhrase(string playerPhrase) =>  _playerPhrase.SetText(playerPhrase);
-
 		public void SetStartWaveButtonActive(bool isActive) => _startWaveButton.gameObject.SetActive(isActive);
+
+		public void SetCurrentWave(string waveInfo) => _currentStageView.SetText(waveInfo);
 
 		private void OnStartWaveButtonClicked() => StartWaveClick?.Invoke();
 	}

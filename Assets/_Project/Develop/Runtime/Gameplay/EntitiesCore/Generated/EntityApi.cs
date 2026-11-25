@@ -513,6 +513,23 @@ namespace _Project.Develop.Runtime.Gameplay.EntitiesCore
 			return result;
 		}
 
+		public _Project.Develop.Runtime.Gameplay.Features.LIfeCycle.HealthBarPoint HealthBarPointC => GetComponent<_Project.Develop.Runtime.Gameplay.Features.LIfeCycle.HealthBarPoint>();
+		public UnityEngine.Transform HealthBarPoint => HealthBarPointC.Value;
+		public Entity AddHealthBarPoint(UnityEngine.Transform value = default)
+		{
+			var component = new _Project.Develop.Runtime.Gameplay.Features.LIfeCycle.HealthBarPoint();
+			component.Value = value;
+			AddComponent(component);
+			return this;
+		}
+
+		public bool TryGetHealthBarPoint(out UnityEngine.Transform component)
+		{
+			bool result = TryGetComponent<_Project.Develop.Runtime.Gameplay.Features.LIfeCycle.HealthBarPoint>(out _Project.Develop.Runtime.Gameplay.Features.LIfeCycle.HealthBarPoint rawComponent);
+			component = result ? rawComponent.Value : default;
+			return result;
+		}
+
 		public _Project.Develop.Runtime.Gameplay.Features.Attack.InAttackCooldown InAttackCooldownC => GetComponent<_Project.Develop.Runtime.Gameplay.Features.Attack.InAttackCooldown>();
 		public _Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Boolean> InAttackCooldown => InAttackCooldownC.Value;
 		public Entity AddInAttackCooldown(_Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Boolean> value = default)
@@ -560,6 +577,23 @@ namespace _Project.Develop.Runtime.Gameplay.EntitiesCore
 		public bool TryGetInDeathProcess(out _Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Boolean> component)
 		{
 			bool result = TryGetComponent<_Project.Develop.Runtime.Gameplay.Features.LIfeCycle.InDeathProcess>(out _Project.Develop.Runtime.Gameplay.Features.LIfeCycle.InDeathProcess rawComponent);
+			component = result ? rawComponent.Value : default;
+			return result;
+		}
+
+		public _Project.Develop.Runtime.Gameplay.Features.SpawnFeatures.InSpawnProcess InSpawnProcessC => GetComponent<_Project.Develop.Runtime.Gameplay.Features.SpawnFeatures.InSpawnProcess>();
+		public _Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Boolean> InSpawnProcess => InSpawnProcessC.Value;
+		public Entity AddInSpawnProcess(_Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Boolean> value = default)
+		{
+			var component = new _Project.Develop.Runtime.Gameplay.Features.SpawnFeatures.InSpawnProcess();
+			component.Value = value ?? new _Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Boolean>();
+			AddComponent(component);
+			return this;
+		}
+
+		public bool TryGetInSpawnProcess(out _Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Boolean> component)
+		{
+			bool result = TryGetComponent<_Project.Develop.Runtime.Gameplay.Features.SpawnFeatures.InSpawnProcess>(out _Project.Develop.Runtime.Gameplay.Features.SpawnFeatures.InSpawnProcess rawComponent);
 			component = result ? rawComponent.Value : default;
 			return result;
 		}
@@ -979,6 +1013,40 @@ namespace _Project.Develop.Runtime.Gameplay.EntitiesCore
 			return result;
 		}
 
+		public _Project.Develop.Runtime.Gameplay.Features.SpawnFeatures.SpawnCurrentTime SpawnCurrentTimeC => GetComponent<_Project.Develop.Runtime.Gameplay.Features.SpawnFeatures.SpawnCurrentTime>();
+		public _Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> SpawnCurrentTime => SpawnCurrentTimeC.Value;
+		public Entity AddSpawnCurrentTime(_Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> value = default)
+		{
+			var component = new _Project.Develop.Runtime.Gameplay.Features.SpawnFeatures.SpawnCurrentTime();
+			component.Value = value ?? new _Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single>();
+			AddComponent(component);
+			return this;
+		}
+
+		public bool TryGetSpawnCurrentTime(out _Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> component)
+		{
+			bool result = TryGetComponent<_Project.Develop.Runtime.Gameplay.Features.SpawnFeatures.SpawnCurrentTime>(out _Project.Develop.Runtime.Gameplay.Features.SpawnFeatures.SpawnCurrentTime rawComponent);
+			component = result ? rawComponent.Value : default;
+			return result;
+		}
+
+		public _Project.Develop.Runtime.Gameplay.Features.SpawnFeatures.SpawnInitialTime SpawnInitialTimeC => GetComponent<_Project.Develop.Runtime.Gameplay.Features.SpawnFeatures.SpawnInitialTime>();
+		public _Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> SpawnInitialTime => SpawnInitialTimeC.Value;
+		public Entity AddSpawnInitialTime(_Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> value = default)
+		{
+			var component = new _Project.Develop.Runtime.Gameplay.Features.SpawnFeatures.SpawnInitialTime();
+			component.Value = value ?? new _Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single>();
+			AddComponent(component);
+			return this;
+		}
+
+		public bool TryGetSpawnInitialTime(out _Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> component)
+		{
+			bool result = TryGetComponent<_Project.Develop.Runtime.Gameplay.Features.SpawnFeatures.SpawnInitialTime>(out _Project.Develop.Runtime.Gameplay.Features.SpawnFeatures.SpawnInitialTime rawComponent);
+			component = result ? rawComponent.Value : default;
+			return result;
+		}
+
 		public _Project.Develop.Runtime.Gameplay.Features.LIfeCycle.Energy.SpendEnergyEvent SpendEnergyEventC => GetComponent<_Project.Develop.Runtime.Gameplay.Features.LIfeCycle.Energy.SpendEnergyEvent>();
 		public _Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent<System.Single> SpendEnergyEvent => SpendEnergyEventC.Value;
 		public Entity AddSpendEnergyEvent(_Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent<System.Single> value = default)
@@ -1391,6 +1459,12 @@ namespace _Project.Develop.Runtime.Gameplay.EntitiesCore
 		public Entity AddSelfReleaseSystem(_Project.Develop.Runtime.Gameplay.EntitiesCore.EntitiesLifeContext entitiesLifeContext)
 		{
 			AddSystem(new _Project.Develop.Runtime.Gameplay.Features.LIfeCycle.SelfReleaseSystem(entitiesLifeContext));
+			return this;
+		}
+
+		public Entity AddSpawnProcessTimerSystem()
+		{
+			AddSystem(new _Project.Develop.Runtime.Gameplay.Features.SpawnFeatures.SpawnProcessTimerSystem());
 			return this;
 		}
 

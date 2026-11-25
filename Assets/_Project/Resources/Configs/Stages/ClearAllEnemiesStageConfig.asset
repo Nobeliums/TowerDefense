@@ -17,4 +17,4 @@ MonoBehaviour:
     <Count>k__BackingField: 1
   - <EntityConfig>k__BackingField: {fileID: 11400000, guid: 06e7d6d9a5d16a14a8990fc85bf2ee42, type: 2}
     <Count>k__BackingField: 3
-  <SpawnRadius>k__BackingField: 10
+  <SpawnRadius>k__BackingField: 6

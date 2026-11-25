@@ -38,7 +38,7 @@ namespace _Project.Develop.Runtime.Gameplay.EntitiesCore
 			Entity entity = CreateEmpty();
 
 			MonoEntity monoEntity =
-				_monoEntitiesFactory.Create(entity, position, "Prefabs/Gameplay/Entity/GhostMonoEntity");
+				_monoEntitiesFactory.Create(entity, position, "Prefabs/Entities/Enemies/GhostMonoEntity");
 			
 			Debug.Log(entity.ToString());
 
@@ -54,6 +54,9 @@ namespace _Project.Develop.Runtime.Gameplay.EntitiesCore
 				.AddInDeathProcess(new ReactiveVariable<bool>(false))
 				.AddDeathProcessInitialTime(new ReactiveVariable<float>(config.HealthConfig.DeathProcessInitialTime))
 				.AddDeathProcessCurrentTime()
+				.AddSpawnInitialTime(new ReactiveVariable<float>(config.SpawnProcessInitialTime))
+				.AddSpawnCurrentTime()
+				.AddInSpawnProcess(new ReactiveVariable<bool>(false))
 				.AddTakeDamageRequest()
 				.AddTakeDamageEvent()
 				.AddContactsDetectingMask(Layers.CharacterMask)
@@ -62,12 +65,15 @@ namespace _Project.Develop.Runtime.Gameplay.EntitiesCore
 				.AddBodyContactDamage(new ReactiveVariable<float>(config.AttackConfig.Damage));
 
 			ICompositeCondition canMove = new CompositeCondition()
+				.AddCondition(new FuncCondition(() => entity.InSpawnProcess.Value == false))
 				.AddCondition(new FuncCondition(() => entity.IsDead.Value == false));
 
 			ICompositeCondition canRotate = new CompositeCondition()
+				.AddCondition(new FuncCondition(() => entity.InSpawnProcess.Value == false))
 				.AddCondition(new FuncCondition(() => entity.IsDead.Value == false));
 
 			ICompositeCondition mustDie = new CompositeCondition()
+				.AddCondition(new FuncCondition(() => entity.InSpawnProcess.Value == false))
 				.AddCondition(new FuncCondition(() => entity.CurrentHealth.Value <= 0f));
 
 			ICompositeCondition mustRelease = new CompositeCondition()
@@ -75,6 +81,7 @@ namespace _Project.Develop.Runtime.Gameplay.EntitiesCore
 				.AddCondition(new FuncCondition(() => entity.InDeathProcess.Value == false));
 
 			ICompositeCondition canApplyDamage = new CompositeCondition()
+				.AddCondition(new FuncCondition(() => entity.InSpawnProcess.Value == false))
 				.AddCondition(new FuncCondition(() => entity.IsDead.Value == false));
 
 			entity
@@ -93,19 +100,19 @@ namespace _Project.Develop.Runtime.Gameplay.EntitiesCore
 				.AddApplyDamageSystem()
 				.AddDeathSystem()
 				.AddDeathProcessTimerSystem()
+				.AddSpawnProcessTimerSystem()
 				.AddSelfReleaseSystem(_entitiesContext);
-			
-			_entitiesContext.Add(entity);
-			
+
+
 			return entity;
-			
+
 		}
-	
+
 		public Entity CreateTowerEntity(Vector3 position, float maxHealth)
 		{
 			Entity entity = CreateEmpty();
 
-			_monoEntitiesFactory.Create(entity, position, "Prefabs/Gameplay/Entity/Tower");
+			_monoEntitiesFactory.Create(entity, position, "Prefabs/Entities/Tower");
 
 			entity
 				.AddMaxHealth(new ReactiveVariable<float>(maxHealth))
@@ -138,7 +145,7 @@ namespace _Project.Develop.Runtime.Gameplay.EntitiesCore
 			Entity entity = CreateEmpty();
 
 			MonoEntity monoEntity =
-				_monoEntitiesFactory.Create(entity, position, "Prefabs/Gameplay/Entity/Projectiles/Projectile");
+				_monoEntitiesFactory.Create(entity, position, "Prefabs/Entities/Projectiles/Projectile");
 
 			entity
 				.AddMoveDirection(new ReactiveVariable<Vector3>(direction))
@@ -197,7 +204,7 @@ namespace _Project.Develop.Runtime.Gameplay.EntitiesCore
 			Entity entity = CreateEmpty();
 
 			MonoEntity monoEntity =
-				_monoEntitiesFactory.Create(entity, position, "Prefabs/Gameplay/Entity/GhostMonoEntity");
+				_monoEntitiesFactory.Create(entity, position, "Prefabs/Entities/Enemies/GhostMonoEntity");
 			
 			entity				.AddMoveDirection()
 				.AddMoveSpeed(new ReactiveVariable<float>(config.MovementConfig.MoveSpeed))
@@ -210,6 +217,9 @@ namespace _Project.Develop.Runtime.Gameplay.EntitiesCore
 				.AddInDeathProcess(new ReactiveVariable<bool>(false))
 				.AddDeathProcessInitialTime(new ReactiveVariable<float>(config.HealthConfig.DeathProcessInitialTime))
 				.AddDeathProcessCurrentTime()
+				.AddSpawnInitialTime(new ReactiveVariable<float>(config.SpawnProcessInitialTime))
+				.AddSpawnCurrentTime()
+				.AddInSpawnProcess(new ReactiveVariable<bool>(false))
 				.AddTakeDamageRequest()
 				.AddTakeDamageEvent()
 				.AddExplosionDamage(new ReactiveVariable<float>(config.ExplosionConfig.Damage))
@@ -219,20 +229,25 @@ namespace _Project.Develop.Runtime.Gameplay.EntitiesCore
 				.AddCurrentTarget();
 
 			ICompositeCondition canMove = new CompositeCondition()
+				.AddCondition(new FuncCondition(() => entity.InSpawnProcess.Value == false))
 				.AddCondition(new FuncCondition(() => entity.IsDead.Value == false));
 
 			ICompositeCondition canRotate = new CompositeCondition()
+				.AddCondition(new FuncCondition(() => entity.InSpawnProcess.Value == false))
 				.AddCondition(new FuncCondition(() => entity.IsDead.Value == false));
 
-			ICompositeCondition mustDie = new CompositeCondition(LogicOperations.Or)
-				.AddCondition(new FuncCondition(() => entity.CurrentHealth.Value <= 0f))
-				.AddCondition(new FuncCondition(() => entity.IsDetonated.Value));
+			ICompositeCondition mustDie = new CompositeCondition()
+				.AddCondition(new FuncCondition(() => entity.InSpawnProcess.Value == false))
+				.AddCondition(new CompositeCondition(LogicOperations.Or)
+					.AddCondition(new FuncCondition(() => entity.CurrentHealth.Value <= 0f))
+					.AddCondition(new FuncCondition(() => entity.IsDetonated.Value)));
 
 			ICompositeCondition mustRelease = new CompositeCondition()
 				.AddCondition(new FuncCondition(() => entity.IsDead.Value))
 				.AddCondition(new FuncCondition(() => entity.InDeathProcess.Value == false));
 
 			ICompositeCondition canApplyDamage = new CompositeCondition()
+				.AddCondition(new FuncCondition(() => entity.InSpawnProcess.Value == false))
 				.AddCondition(new FuncCondition(() => entity.IsDead.Value == false));
 
 			entity
@@ -248,10 +263,10 @@ namespace _Project.Develop.Runtime.Gameplay.EntitiesCore
 				.AddApplyDamageSystem()
 				.AddDeathSystem()
 				.AddDeathProcessTimerSystem()
+				.AddSpawnProcessTimerSystem()
 				.AddSelfReleaseSystem(_entitiesContext)
 				.AddExplosionTriggerSystem(Layers.CharacterMask, _container.Resolve<ExplosionService>());
 			
-			_entitiesContext.Add(entity);
 			
 			return entity;
 		}
@@ -260,7 +275,7 @@ namespace _Project.Develop.Runtime.Gameplay.EntitiesCore
 		{
 			Entity entity = CreateEmpty();
 
-			_monoEntitiesFactory.Create(entity, position, "Prefabs/Gameplay/Entity/Mine");
+			_monoEntitiesFactory.Create(entity, position, "Prefabs/Entities/Mine");
 
 			entity
 				.AddIsDead(new ReactiveVariable<bool>(false))
@@ -293,7 +308,7 @@ namespace _Project.Develop.Runtime.Gameplay.EntitiesCore
 			Entity entity = CreateEmpty();
 
 			MonoEntity monoEntity =
-				_monoEntitiesFactory.Create(entity, position, "Prefabs/Gameplay/Entity/TeleportGhostMonoEntity");
+				_monoEntitiesFactory.Create(entity, position, "Prefabs/Entities/Enemies/TeleportGhostMonoEntity");
 
 			entity
 				.AddMaxHealth(new ReactiveVariable<float>(config.HealthConfig.MaxHealth))
@@ -302,6 +317,9 @@ namespace _Project.Develop.Runtime.Gameplay.EntitiesCore
 				.AddInDeathProcess(new ReactiveVariable<bool>(false))
 				.AddDeathProcessInitialTime(new ReactiveVariable<float>(config.HealthConfig.DeathProcessInitialTime))
 				.AddDeathProcessCurrentTime()
+				.AddSpawnInitialTime(new ReactiveVariable<float>(config.SpawnProcessInitialTime))
+				.AddSpawnCurrentTime()
+				.AddInSpawnProcess(new ReactiveVariable<bool>(false))
 				.AddTakeDamageRequest()
 				.AddTakeDamageEvent()
 				.AddCurrentEnergy(new ReactiveVariable<float>(config.EnergyConfig.StartEnergy))
@@ -327,24 +345,29 @@ namespace _Project.Develop.Runtime.Gameplay.EntitiesCore
 				.AddTeleportRequest();
 
 			ICompositeCondition mustDie = new CompositeCondition()
+				.AddCondition(new FuncCondition(() => entity.InSpawnProcess.Value == false))
 				.AddCondition(new FuncCondition(() => entity.CurrentHealth.Value <= 0f));
 
 			ICompositeCondition mustRelease = new CompositeCondition()
 				.AddCondition(new FuncCondition(() => entity.IsDead.Value))
 				.AddCondition(new FuncCondition(() => entity.InDeathProcess.Value == false));
-			
+
 			ICompositeCondition canApplyDamage = new CompositeCondition()
+				.AddCondition(new FuncCondition(() => entity.InSpawnProcess.Value == false))
 				.AddCondition(new FuncCondition(() => entity.IsDead.Value == false));
-			
+
 			ICompositeCondition canSpendEnergy = new CompositeCondition()
+				.AddCondition(new FuncCondition(() => entity.InSpawnProcess.Value == false))
 				.AddCondition(new FuncCondition(() => entity.IsDead.Value == false))
 				.AddCondition(new FuncCondition(() => entity.InDeathProcess.Value == false));
 			
 			ICompositeCondition canRegenerateEnergy = new CompositeCondition()
+				.AddCondition(new FuncCondition(() => entity.InSpawnProcess.Value == false))
 				.AddCondition(new FuncCondition(() => entity.IsDead.Value == false))
 				.AddCondition(new FuncCondition(() => entity.InDeathProcess.Value == false));
 			
 			ICompositeCondition canTeleport = new  CompositeCondition()
+				.AddCondition(new FuncCondition(() => entity.InSpawnProcess.Value == false))
 				.AddCondition(new FuncCondition(() => entity.IsDead.Value == false))
 				.AddCondition(new FuncCondition(() => entity.InDeathProcess.Value == false))
 				.AddCondition(new FuncCondition(
@@ -368,10 +391,10 @@ namespace _Project.Develop.Runtime.Gameplay.EntitiesCore
 				.AddApplyDamageSystem()
 				.AddDeathSystem()
 				.AddDeathProcessTimerSystem()
+				.AddSpawnProcessTimerSystem()
 				.AddSelfReleaseSystem(_entitiesContext)
 				.AddTeleportTakeDamageSystem(_collidersRegistryService);
 			
-			_entitiesContext.Add(entity);
 			
 			return entity;
 		}

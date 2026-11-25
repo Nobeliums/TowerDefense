@@ -1,3 +1,4 @@
+using System;
 using _Project.Develop.Runtime.Meta.Features.GameStatistics;
 using _Project.Develop.Runtime.Meta.Features.LevelsProgression;
 using _Project.Develop.Runtime.Meta.Features.Wallet;
@@ -15,6 +16,9 @@ namespace _Project.Develop.Runtime.Features.Gamecycle
 		private readonly LevelsProgressionService _levelsProgressionService;
 		private readonly int _levelNumber;
 		private readonly int _winReward;
+
+		public event Action Won;
+		public event Action Defeated;
 
 		public GameResultHandler(
 			GameStatisticsService gameStatisticsService,
@@ -40,12 +44,16 @@ namespace _Project.Develop.Runtime.Features.Gamecycle
 			_walletService.Add(_winReward, WalletCurrencyType.Gold);
 			_levelsProgressionService.AddLevelToCompleted(_levelNumber);
 			_coroutinePerformer.StartPerform(_playerDataProvider.SaveAsync());
+
+			Won?.Invoke();
 		}
 
 		public void OnDefeat()
 		{
 			_gameStatisticsService.OnLoseGame();
 			_coroutinePerformer.StartPerform(_playerDataProvider.SaveAsync());
+
+			Defeated?.Invoke();
 		}
 	}
 }

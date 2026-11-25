@@ -8,6 +8,7 @@ using _Project.Develop.Runtime.Gameplay.EntitiesCore.Mono;
 using _Project.Develop.Runtime.Gameplay.Features.AI;
 using _Project.Develop.Runtime.Infrastructure;
 using _Project.Develop.Runtime.Infrastructure.DI;
+using _Project.Develop.Runtime.UI.Core.Gameplay;
 using _Project.Develop.Runtime.Utilities.ConfigManagement;
 using _Project.Develop.Runtime.Utilities.CoroutineManagement;
 using _Project.Develop.Runtime.Utilities.DataManagment.DataProvider;
@@ -23,6 +24,7 @@ namespace _Project.Develop.Runtime.Gameplay.Infrastructure
 		private GameplayCycle _gameCycle;
 		private EntitiesLifeContext _entitiesContext;
 		private AIBrainsContext _aiBrainsContext;
+		private GameplayPresenter _gameplayPresenter;
 
 		public override void ProcessRegistrations(DIContainer container, IInputSceneArgs sceneArgs = null)
 		{
@@ -41,6 +43,7 @@ namespace _Project.Develop.Runtime.Gameplay.Infrastructure
 			_gameCycle = _container.Resolve<GameplayCycle>();
 			_entitiesContext =  _container.Resolve<EntitiesLifeContext>();
 			_aiBrainsContext = _container.Resolve<AIBrainsContext>();
+			_gameplayPresenter = _container.Resolve<GameplayPresenter>();
 
 			LevelConfig levelConfig = _container.Resolve<ConfigService>()
 				.GetConfig<LevelListConfig>()
@@ -65,6 +68,11 @@ namespace _Project.Develop.Runtime.Gameplay.Infrastructure
 				return;
 
 			_gameCycle.Update(Time.deltaTime);
+		}
+
+		private void LateUpdate()
+		{
+			_gameplayPresenter?.LateUpdate();
 		}
 
 		private void OnDestroy()

@@ -57,7 +57,7 @@ namespace _Project.Develop.Runtime.Meta.Infrastructure
 		{
 			ResourceLoadService resourceLoadService = container.Resolve<ResourceLoadService>();
 			
-			MainMenuCanvasRoot canvasRoot = resourceLoadService.Load<MainMenuCanvasRoot>("Prefabs/UI/MainMenuCanvasRoot");
+			MainMenuCanvasRoot canvasRoot = resourceLoadService.Load<MainMenuCanvasRoot>("Prefabs/UI/MainMenu/MainMenuCanvasRoot");
 			
 			return Object.Instantiate(canvasRoot);
 		}

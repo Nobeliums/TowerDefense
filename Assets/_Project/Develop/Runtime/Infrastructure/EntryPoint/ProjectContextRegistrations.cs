@@ -107,7 +107,7 @@ namespace _Project.Develop.Runtime.Infrastructure.EntryPoint
 		{
 			ResourceLoadService loadService = c.Resolve<ResourceLoadService>();
     
-			CoroutinePerformer performerPrefab = loadService.Load<CoroutinePerformer>("Prefabs/CoroutinePerformer");
+			CoroutinePerformer performerPrefab = loadService.Load<CoroutinePerformer>("Prefabs/Infrastructure/CoroutinePerformer");
 			return Object.Instantiate(performerPrefab);
 		}
 
@@ -122,7 +122,7 @@ namespace _Project.Develop.Runtime.Infrastructure.EntryPoint
 		{
 			ResourceLoadService loadService = c.Resolve<ResourceLoadService>();
 			
-			StandartLoadingScreen screen = loadService.Load<StandartLoadingScreen>("Prefabs/LoadingScreen");
+			StandartLoadingScreen screen = loadService.Load<StandartLoadingScreen>("Prefabs/Infrastructure/LoadingScreen");
 
 			return Object.Instantiate(screen);
 		}

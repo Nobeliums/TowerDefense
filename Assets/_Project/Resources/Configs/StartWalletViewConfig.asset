@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _walletConfigDatas:
   - <CurrencyType>k__BackingField: 0
-    <Sprite>k__BackingField: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+    <Sprite>k__BackingField: {fileID: 21300000, guid: 55c570e935443478fb832497b4c95e8f, type: 3}

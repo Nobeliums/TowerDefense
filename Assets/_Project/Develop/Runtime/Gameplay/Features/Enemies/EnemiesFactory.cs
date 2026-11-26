@@ -58,6 +58,8 @@ namespace _Project.Develop.Runtime.Gameplay.Features.Enemies
 
 			entity.AddTeam(new ReactiveVariable<Teams>(Teams.Enemy));
 
+			_entitiesLifeContext.Add(entity);
+
 			return entity;
 		}
 	}

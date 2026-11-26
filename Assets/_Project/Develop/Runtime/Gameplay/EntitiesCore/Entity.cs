@@ -16,12 +16,16 @@ namespace _Project.Develop.Runtime.Gameplay.EntitiesCore
 
 		private bool _isInit;
 
+		public event Action<Entity> Initialized;
+
 		public void Initialize()
 		{
 			foreach (IInitializableSystem initializableSystem in _initializables)
 				initializableSystem.OnInit(this);
 			
 			_isInit = true;
+
+			Initialized?.Invoke(this);
 		}
 
 		public bool IsInit => _isInit;

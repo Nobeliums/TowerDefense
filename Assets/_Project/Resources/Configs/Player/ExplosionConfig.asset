@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3d1f07365d1410dbf26b1ed1cbceab8, type: 3}
   m_Name: ExplosionConfig
   m_EditorClassIdentifier: 
-  <ExplosionRadius>k__BackingField: 3
+  <ExplosionRadius>k__BackingField: 2
   <Damage>k__BackingField: 30

@@ -13,15 +13,18 @@ namespace _Project.Develop.Runtime.UI.Core
 
 		private readonly Dictionary<string, string> _viewIdToResourcesPath = new()
 		{
-			{ViewIds.CurrencyView, "Prefabs/CurrencyView"},
-			{ViewIds.MainMenuView, "Prefabs/UI/MainMenuView"},
-			{ViewIds.GameStatTextView, "Prefabs/UI/TextBoxView"},
-			{ViewIds.SelectCharsGameButtonView, "Prefabs/UI/SelectLevelNumberView"},
-			{ViewIds.SelectGameCharsPopupView, "Prefabs/UI/SelectLevelNumberPopup"},
-			{ViewIds.ShopItemBuyButtonView, "Prefabs/UI/ShopItemBuy"},
-			{ViewIds.ShopPopupView, "Prefabs/UI/ShopPopup"},
-			{ViewIds.GameplayView, "Prefabs/UI/GameplayView"},
-			{ViewIds.GameResultPopupView, "Prefabs/UI/GameResultPopup"}
+			{ViewIds.CurrencyView, "Prefabs/UI/Common/CurrencyView"},
+			{ViewIds.MainMenuView, "Prefabs/UI/MainMenu/MainMenuView"},
+			{ViewIds.GameStatTextView, "Prefabs/UI/Common/TextBoxView"},
+			{ViewIds.SelectCharsGameButtonView, "Prefabs/UI/MainMenu/SelectLevelNumberView"},
+			{ViewIds.SelectGameCharsPopupView, "Prefabs/UI/MainMenu/SelectLevelNumberPopup"},
+			{ViewIds.ShopItemBuyButtonView, "Prefabs/UI/MainMenu/ShopItemBuy"},
+			{ViewIds.ShopPopupView, "Prefabs/UI/MainMenu/ShopPopup"},
+			{ViewIds.GameplayView, "Prefabs/UI/Gameplay/GameplayView"},
+			{ViewIds.WinResultPopupView, "Prefabs/UI/Gameplay/WinResultPopup"},
+			{ViewIds.DefeatResultPopupView, "Prefabs/UI/Gameplay/DefeatResultPopup"},
+			{ViewIds.TowerHealthBar, "Prefabs/UI/Gameplay/Bars/TowerHealthBar"},
+			{ViewIds.EnemyHealthBar, "Prefabs/UI/Gameplay/Bars/EnemyHealthBar"}
 		};
 
 		public ViewFactory(ResourceLoadService resourceLoadService)

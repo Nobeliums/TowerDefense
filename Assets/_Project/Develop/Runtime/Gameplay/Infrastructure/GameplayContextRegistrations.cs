@@ -1,4 +1,5 @@
 ﻿using _Project.Develop.Runtime.Features.Gamecycle;
+using _Project.Develop.Runtime.Gameplay.Configs.Effects;
 using _Project.Develop.Runtime.Gameplay.Configs.Levels;
 using _Project.Develop.Runtime.Gameplay.EntitiesCore;
 using _Project.Develop.Runtime.Gameplay.EntitiesCore.Mono;
@@ -40,6 +41,7 @@ namespace _Project.Develop.Runtime.Gameplay.Infrastructure
 			container.RegistryAsSingle(CreateMonoEntitiesFactory).NonLazy();
 			container.RegistryAsSingle(CreateCollidersRegistryService);
 			container.RegistryAsSingle(CreateExplosionService);
+			container.RegistryAsSingle(CreateExplosionEffectSpawner).NonLazy();
 			container.RegistryAsSingle(CreateBrainsFactory);
 			container.RegistryAsSingle(CreateAIBrainsContext);
 			container.RegistryAsSingle(CreateDesktopInputService);
@@ -92,6 +94,11 @@ namespace _Project.Develop.Runtime.Gameplay.Infrastructure
 		private static ExplosionService CreateExplosionService(DIContainer c)
 			=> new ExplosionService(c.Resolve<CollidersRegistryService>());
 
+		private static ExplosionEffectSpawner CreateExplosionEffectSpawner(DIContainer c)
+			=> new ExplosionEffectSpawner(
+				c.Resolve<ExplosionService>(),
+				c.Resolve<ConfigService>().GetConfig<ExplosionEffectConfig>());
+
 		private static WaveStartRequestService CreateWaveStartRequestService(DIContainer c)
 			=> new WaveStartRequestService();
 
@@ -128,7 +135,6 @@ namespace _Project.Develop.Runtime.Gameplay.Infrastructure
 			return new EntitiesLifeContext();
 		}
 
-
 	private static EntitiesFactory CreateEntitiesFactory(DIContainer c)
 		{
 			return new EntitiesFactory(c);
@@ -157,7 +163,7 @@ namespace _Project.Develop.Runtime.Gameplay.Infrastructure
 		{
 			ResourceLoadService resourceLoadService = c.Resolve<ResourceLoadService>();
 			
-			GameplayCanvasRoot canvasRoot = resourceLoadService.Load<GameplayCanvasRoot>("Prefabs/UI/GameplayCanvasRoot");
+			GameplayCanvasRoot canvasRoot = resourceLoadService.Load<GameplayCanvasRoot>("Prefabs/UI/Gameplay/GameplayCanvasRoot");
 			
 			return Object.Instantiate(canvasRoot);
 		}

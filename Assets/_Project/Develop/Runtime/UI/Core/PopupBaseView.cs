@@ -12,8 +12,16 @@ namespace _Project.Develop.Runtime.UI.Core
 		
 		[SerializeField] private CanvasGroup _group;
 		[SerializeField] private Button _closeButton;
+
+		[Header("Animation")]
+		[SerializeField] private RectTransform _content;
+		[SerializeField] private float _showDuration = 0.25f;
+		[SerializeField] private float _hideDuration = 0.15f;
+		[SerializeField] private float _hiddenScale = 0.85f;
 		
 		private Sequence _animationSequence;
+
+		private Transform Content => _content != null ? _content : transform;
 
 		private void Awake()
 		{
@@ -24,9 +32,15 @@ namespace _Project.Develop.Runtime.UI.Core
 		{
 			OnPreShow();
 
-			_group.alpha = 1.0f;
-			
-			_animationSequence =  DOTween.Sequence();
+			_animationSequence?.Kill();
+
+			_group.alpha = 0.0f;
+			Content.localScale = Vector3.one * _hiddenScale;
+
+			_animationSequence = DOTween.Sequence()
+				.Join(_group.DOFade(1.0f, _showDuration).SetEase(Ease.OutQuad))
+				.Join(Content.DOScale(1.0f, _showDuration).SetEase(Ease.OutBack))
+				.SetLink(gameObject);
 
 			OnPostShow();
 
@@ -36,10 +50,13 @@ namespace _Project.Develop.Runtime.UI.Core
 		public Tween Hide()
 		{
 			OnPreHide();
-	
-			_group.alpha = 0.0f;
-			
-			_animationSequence =  DOTween.Sequence();
+
+			_animationSequence?.Kill();
+
+			_animationSequence = DOTween.Sequence()
+				.Join(_group.DOFade(0.0f, _hideDuration).SetEase(Ease.InQuad))
+				.Join(Content.DOScale(_hiddenScale, _hideDuration).SetEase(Ease.InBack))
+				.SetLink(gameObject);
 	
 			OnPostHide();
 			

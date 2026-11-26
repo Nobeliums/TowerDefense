@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using _Project.Develop.Runtime.Gameplay.Configs;
+using _Project.Develop.Runtime.Gameplay.Configs.Effects;
 using _Project.Develop.Runtime.Gameplay.Configs.Levels;
 using _Project.Develop.Runtime.Gameplay.Configs.Stages;
 using _Project.Develop.Runtime.Meta.Configs;
@@ -23,7 +24,8 @@ namespace _Project.Develop.Runtime.Utilities.ConfigManagement
             {typeof(GhostTeleportConfig), "Configs/TeleportGhost/TeleportGhostConfig"},
             {typeof(ClearAllEnemiesStageConfig), "Configs/Stages/ClearAllEnemiesStageConfig"},
             {typeof(LevelListConfig), "Configs/Levels/LevelListConfig"},
-            {typeof(PlayerConfig), "Configs/Player/PlayerConfig" }
+            {typeof(PlayerConfig), "Configs/Player/PlayerConfig" },
+            {typeof(ExplosionEffectConfig), "Configs/Effects/ExplosionEffectConfig" }
         };
         
         public ResourcesConfigLoader(ResourceLoadService resources)
